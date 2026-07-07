@@ -1,12 +1,12 @@
 :root {
   --bg: #f6f8fb;
   --surface: #ffffff;
-  --surface-soft: #eef7f3;
+  --surface-soft: #eaf3fa;
   --text: #17202a;
   --muted: #667085;
   --line: #d9e2ec;
-  --primary: #0f9f6e;
-  --primary-dark: #087852;
+  --primary: #0f4c83;
+  --primary-dark: #0a355c;
   --accent: #e94f7c;
   --warning: #f6b73c;
   --shadow: 0 20px 50px rgba(22, 34, 51, 0.12);
@@ -67,9 +67,10 @@ a {
   position: sticky;
   top: 0;
   z-index: 30;
-  border-bottom: 1px solid rgba(217, 226, 236, 0.82);
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: 0 12px 30px rgba(22, 34, 51, 0.08);
 }
 
 .nav {
@@ -112,9 +113,22 @@ a {
 
 .nav-links a:hover,
 .nav-links a:focus-visible {
-  background: #e8f5ef;
+  background: #eaf3fa;
   color: var(--primary-dark);
   outline: none;
+}
+
+.nav-links .nav-cta {
+  margin-left: 8px;
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(15, 76, 131, 0.18);
+}
+
+.nav-links .nav-cta:hover,
+.nav-links .nav-cta:focus-visible {
+  background: var(--primary-dark);
+  color: #fff;
 }
 
 main {
@@ -133,8 +147,8 @@ main {
 .hero {
   position: relative;
   min-height: calc(100dvh - 72px);
-  padding: clamp(52px, 7vw, 88px) 0 48px;
-  background: linear-gradient(135deg, #f6f8fb 0%, #e8f5ef 58%, #fff4f7 100%);
+  padding: clamp(28px, 5vw, 56px) 0 48px;
+  background: #fff;
 }
 
 .hero .container {
@@ -156,9 +170,9 @@ main {
 
 .eyebrow::before {
   content: "";
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
+  width: 28px;
+  height: 2px;
+  border-radius: 999px;
   background: var(--primary);
 }
 
@@ -206,7 +220,7 @@ h1 {
 .btn-primary {
   background: var(--primary);
   color: #fff;
-  box-shadow: 0 12px 28px rgba(15, 159, 110, 0.24);
+  box-shadow: 0 12px 28px rgba(15, 76, 131, 0.22);
 }
 
 .btn-primary:hover,
@@ -305,7 +319,7 @@ h1 {
   margin-bottom: 18px;
   place-items: center;
   border-radius: 50%;
-  background: #e8f5ef;
+  background: #eaf3fa;
   color: var(--primary-dark);
   font-weight: 900;
 }
@@ -320,7 +334,7 @@ h1 {
 }
 
 .about {
-  background: #eef5f1;
+  background: #fff;
 }
 
 .about .section-head {
@@ -331,7 +345,7 @@ h1 {
 .journey-kicker {
   display: block;
   margin-bottom: 8px;
-  color: rgba(8, 120, 82, 0.52);
+  color: rgba(15, 76, 131, 0.42);
   font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(34px, 8vw, 86px);
   font-style: italic;
@@ -340,13 +354,6 @@ h1 {
 
 .journey-subtitle {
   max-width: 520px;
-}
-
-.journey-status {
-  margin-top: 12px;
-  color: var(--primary-dark);
-  font-size: 14px;
-  font-weight: 800;
 }
 
 .carousel-controls {
@@ -366,8 +373,8 @@ h1 {
   width: 48px;
   height: 48px;
   place-items: center;
-  border: 1px solid #b9cdc5;
-  border-radius: var(--radius);
+  border: 1px solid #b7cfe4;
+  border-radius: 50%;
   background: #fff;
   color: var(--primary-dark);
   cursor: pointer;
@@ -378,7 +385,7 @@ h1 {
 .icon-btn:hover,
 .icon-btn:focus-visible {
   border-color: var(--primary);
-  background: #f5fffb;
+  background: #eaf3fa;
   outline: none;
 }
 
@@ -419,22 +426,6 @@ h1 {
   background: #f0f4f8;
 }
 
-.about-card::before {
-  content: attr(data-step);
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  display: grid;
-  width: 54px;
-  height: 54px;
-  place-items: center;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.92);
-  color: var(--primary-dark);
-  font-size: 15px;
-  font-weight: 900;
-  box-shadow: 0 10px 24px rgba(22, 34, 51, 0.16);
-}
 
 .about-card-body {
   display: flex;
@@ -524,14 +515,24 @@ h1 {
 .split-section {
   display: grid;
   grid-template-columns: 0.95fr 1.05fr;
-  align-items: center;
+  align-items: start;
   gap: clamp(28px, 5vw, 72px);
+}
+
+.volunteer-heading {
+  margin-top: 24px;
+  font-size: 22px;
+  font-weight: 900;
 }
 
 .feature-list {
   display: grid;
   gap: 14px;
   margin-top: 24px;
+}
+
+.compact-list {
+  margin-top: 16px;
 }
 
 .feature {
@@ -550,7 +551,7 @@ h1 {
   height: 28px;
   place-items: center;
   border-radius: 50%;
-  background: #e8f5ef;
+  background: #eaf3fa;
   color: var(--primary-dark);
   font-weight: 900;
 }
@@ -578,8 +579,27 @@ h1 {
 }
 
 .cta {
+  position: relative;
   color: #fff;
-  background: linear-gradient(135deg, #17202a 0%, #087852 100%);
+  background:
+    linear-gradient(135deg, rgba(15, 76, 131, 0.94), rgba(10, 53, 92, 0.88)),
+    var(--primary);
+}
+
+.cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04)),
+    rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(14px);
+}
+
+.cta .container {
+  position: relative;
+  z-index: 1;
 }
 
 .cta-grid {
@@ -595,18 +615,48 @@ h1 {
 }
 
 .eyebrow-light {
-  color: #b8f4dc;
+  color: #dbeafe;
+}
+
+.cta .eyebrow::before {
+  background: #dbeafe;
 }
 
 .cta p {
   color: rgba(255, 255, 255, 0.84);
 }
 
+.cta .btn-primary {
+  background: #fff;
+  color: var(--primary);
+  box-shadow: none;
+}
+
+.cta .btn-primary:hover,
+.cta .btn-primary:focus-visible {
+  background: #eaf3fa;
+  color: var(--primary-dark);
+}
+
+.cta .btn-secondary {
+  border-color: rgba(255, 255, 255, 0.72);
+  background: transparent;
+  color: #fff;
+}
+
+.cta .btn-secondary:hover,
+.cta .btn-secondary:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+}
+
 .contact-box {
   padding: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(18px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .contact-row {
@@ -614,7 +664,7 @@ h1 {
   justify-content: space-between;
   gap: 16px;
   padding: 14px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.22);
 }
 
 .contact-row:last-child {
@@ -668,7 +718,7 @@ h1 {
 @media (max-width: 940px) {
   .hero {
     min-height: auto;
-    background: linear-gradient(135deg, #f6f8fb 0%, #e8f5ef 58%, #fff4f7 100%);
+    background: #fff;
   }
 
   .hero .container,
@@ -725,7 +775,7 @@ h1 {
   }
 
   .hero {
-    padding-top: 44px;
+    padding-top: 24px;
   }
 
   .hero-strip {
@@ -738,7 +788,9 @@ h1 {
   }
 
   .card-track {
-    grid-auto-columns: 88%;
+    grid-auto-columns: 100%;
+    gap: 16px;
+    padding-inline: 0;
   }
 
   .carousel-controls {
@@ -748,6 +800,13 @@ h1 {
 
   .about-card {
     min-height: 500px;
+  }
+
+  .about-card img {
+    aspect-ratio: 4 / 3;
+    object-fit: contain;
+    object-position: center;
+    background: #fff;
   }
 
   .journey-details li {
