@@ -1664,7 +1664,7 @@ h1 {
 
 .line-float {
   position: fixed;
-  right: max(0px, env(safe-area-inset-right));
+  right: max(20px, env(safe-area-inset-right));
   bottom: max(18px, env(safe-area-inset-bottom));
   z-index: 40;
   display: block;
@@ -2020,7 +2020,7 @@ h1 {
 
   .line-float {
     width: min(92px, 30vw);
-    right: max(0px, env(safe-area-inset-right));
+    right: max(14px, env(safe-area-inset-right));
     bottom: max(12px, env(safe-area-inset-bottom));
   }
 }
