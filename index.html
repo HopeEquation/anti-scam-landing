@@ -133,10 +133,25 @@
               透過真實情境案例，了解 AI 防詐小幫手如何協助辨識可疑訊息，也學會判斷日常生活中的詐騙風險。
             </p>
           </div>
-          <div class="case-grid section-grid" aria-label="常見詐騙案例分類">
-            <article class="case-card">
+          <div class="case-tags" aria-label="常見詐騙案例分類">
+            <button class="case-filter is-active" type="button" data-case-tag="0" aria-pressed="true">陌生搭話</button>
+            <button class="case-filter" type="button" data-case-tag="1" aria-pressed="false">求職詐騙</button>
+            <button class="case-filter" type="button" data-case-tag="2" aria-pressed="false">貸款詐騙</button>
+            <button class="case-filter" type="button" data-case-tag="3" aria-pressed="false">網購詐騙</button>
+            <button class="case-filter" type="button" data-case-tag="4" aria-pressed="false">釣魚連結</button>
+          </div>
+          <div class="case-carousel" data-case-carousel>
+            <div class="case-carousel-shell">
+              <button class="case-carousel-arrow" type="button" data-case-carousel-prev aria-label="上一個詐騙分類">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m15 18-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+              <div class="case-carousel-viewport">
+                <div class="case-grid section-grid" aria-label="常見詐騙案例分類">
+                  <article class="case-card case-slide is-active" data-case-slide>
               <div class="case-card-body">
-                <h3><button class="case-toggle" type="button" aria-expanded="false">陌生人主動搭話</button></h3>
+                <h3>陌生人主動搭話</h3>
                 <p>陌生人透過簡訊或 LINE 主動搭話，可能假借誤傳、鄰居、熟人等身分建立信任。</p>
               </div>
               <div class="case-gallery" aria-label="陌生訊息案例圖片">
@@ -151,9 +166,9 @@
               </div>
             </article>
 
-            <article class="case-card">
+            <article class="case-card case-slide" data-case-slide hidden>
               <div class="case-card-body">
-                <h3><button class="case-toggle" type="button" aria-expanded="false">高薪免經驗話術</button></h3>
+                <h3>高薪免經驗話術</h3>
                 <p>以高薪、免經驗、在家工作等話術吸引使用者，再要求加 LINE、提供個資或進一步操作。</p>
               </div>
               <div class="case-gallery" aria-label="假求職詐騙案例圖片">
@@ -168,9 +183,9 @@
               </div>
             </article>
 
-            <article class="case-card">
+            <article class="case-card case-slide" data-case-slide hidden>
               <div class="case-card-body">
-                <h3><button class="case-toggle" type="button" aria-expanded="false">快速放款與低利誘惑</button></h3>
+                <h3>快速放款與低利誘惑</h3>
                 <p>利用快速放款、低利率、免保人等誘因，誘導民眾加入 LINE 或提供個人資料。</p>
               </div>
               <div class="case-gallery" aria-label="金融詐騙案例圖片">
@@ -181,9 +196,9 @@
               </div>
             </article>
 
-            <article class="case-card">
+            <article class="case-card case-slide" data-case-slide hidden>
               <div class="case-card-body">
-                <h3><button class="case-toggle" type="button" aria-expanded="false">假買家、客服與物流通知</button></h3>
+                <h3>假買家、客服與物流通知</h3>
                 <p>假冒買家、客服或物流人員，聲稱訂單異常、帳戶凍結，誘導使用者操作帳戶或提供資料。</p>
               </div>
               <div class="case-gallery" aria-label="網購交易詐騙案例圖片">
@@ -198,9 +213,9 @@
               </div>
             </article>
 
-            <article class="case-card case-card-wide">
+            <article class="case-card case-card-wide case-slide" data-case-slide hidden>
               <div class="case-card-body">
-                <h3><button class="case-toggle" type="button" aria-expanded="false">可疑連結與假冒繳費通知</button></h3>
+                <h3>可疑連結與假冒繳費通知</h3>
                 <p>假冒政府機關、公用事業或知名品牌，透過可疑連結要求登入、繳費或輸入信用卡資料。</p>
               </div>
               <div class="case-gallery" aria-label="釣魚郵件與簡訊案例圖片">
@@ -222,6 +237,21 @@
                 </figure>
               </div>
             </article>
+                </div>
+              </div>
+              <button class="case-carousel-arrow" type="button" data-case-carousel-next aria-label="下一個詐騙分類">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+            <div class="case-dots" aria-label="目前詐騙分類">
+              <button class="case-dot is-active" type="button" data-case-dot="0" aria-label="切換到第 1 個詐騙分類" aria-current="true"></button>
+              <button class="case-dot" type="button" data-case-dot="1" aria-label="切換到第 2 個詐騙分類"></button>
+              <button class="case-dot" type="button" data-case-dot="2" aria-label="切換到第 3 個詐騙分類"></button>
+              <button class="case-dot" type="button" data-case-dot="3" aria-label="切換到第 4 個詐騙分類"></button>
+              <button class="case-dot" type="button" data-case-dot="4" aria-label="切換到第 5 個詐騙分類"></button>
+            </div>
           </div>
         </div>
       </section>
@@ -289,7 +319,7 @@
 
       <section id="volunteer" class="section" aria-labelledby="volunteer-title">
         <div class="container split-section">
-          <div class="mascot" aria-hidden="true">
+          <div class="mascot">
             <img src="img/%E5%BF%97%E5%B7%A5.jpg" alt="" loading="lazy" />
           </div>
           <div class="volunteer-content">
@@ -302,12 +332,12 @@
               <p>
                 我們透過「防詐宣導講師培力計畫」，培訓家長、教師、志工與社區夥伴，走進校園推廣數位防詐教育，陪伴孩子認識最新詐騙手法，建立正確的識詐觀念。
               </p>
-            </div>
-            <div class="volunteer-callout">
-              <strong>為什麼需要您？</strong>
-              <p>
-                目前校園防詐宣導持續推動中，若有更多經過培訓的防詐宣導講師加入，便能讓更多班級、更頻繁地接觸到防詐教育。每一次分享，都可能幫助一位孩子避免成為下一位受害者。
-              </p>
+              <div class="volunteer-callout">
+                <strong>為什麼需要您？</strong>
+                <p>
+                  目前校園防詐宣導持續推動中，若有更多經過培訓的防詐宣導講師加入，便能讓更多班級、更頻繁地接觸到防詐教育。每一次分享，都可能幫助一位孩子避免成為下一位受害者。
+                </p>
+              </div>
             </div>
           </div>
           <div class="volunteer-columns">
@@ -329,20 +359,12 @@
                   <img class="check feature-icon" src="img/icon/ppt.png" alt="" aria-hidden="true" loading="lazy">
                   <div><strong>校園宣導技巧與教材使用</strong><span>掌握簡報、案例與互動教材，讓宣導更容易進入班級。</span></div>
                 </div>
-                <div class="feature">
-                  <img class="check feature-icon" src="img/icon/course.png" alt="" aria-hidden="true" loading="lazy">
-                  <div><strong>課堂互動與教學引導</strong><span>用貼近孩子的提問與活動，引導建立數位安全觀念。</span></div>
-                </div>
               </div>
             </section>
             <section class="volunteer-panel" aria-labelledby="participation-title">
               <h3 id="participation-title" class="volunteer-heading">您將參與</h3>
               <p class="participation-note">完成培訓後，<br />您將有機會參與校園與社區防詐推廣。</p>
               <div class="feature-list participation-feature-list">
-                <div class="feature">
-                  <img class="check feature-icon" src="img/icon/education.png" alt="" aria-hidden="true" loading="lazy">
-                  <div><strong>完整教育訓練</strong><span>從防詐基礎到校園宣導流程，逐步完成培訓。</span></div>
-                </div>
                 <div class="feature">
                   <img class="check feature-icon" src="img/icon/school.png" alt="" aria-hidden="true" loading="lazy">
                   <div><strong>校園防詐宣導活動</strong><span>走進班級與活動現場，陪伴孩子建立警覺。</span></div>
@@ -452,13 +474,69 @@
       previousButton.addEventListener("click", () => moveCards(-1));
       nextButton.addEventListener("click", () => moveCards(1));
 
-      document.querySelectorAll(".case-toggle").forEach((button) => {
-        button.addEventListener("click", () => {
-          const card = button.closest(".case-card");
-          const isOpen = card.classList.toggle("is-open");
-          button.setAttribute("aria-expanded", String(isOpen));
+      const caseCarousel = document.querySelector("[data-case-carousel]");
+
+      if (caseCarousel) {
+        const caseSlides = Array.from(caseCarousel.querySelectorAll("[data-case-slide]"));
+        const casePreviousButton = caseCarousel.querySelector("[data-case-carousel-prev]");
+        const caseNextButton = caseCarousel.querySelector("[data-case-carousel-next]");
+        const caseDots = Array.from(caseCarousel.querySelectorAll("[data-case-dot]"));
+        const caseTagButtons = Array.from(document.querySelectorAll("[data-case-tag]"));
+        let activeCaseIndex = 0;
+
+        function showCaseSlide(nextIndex) {
+          activeCaseIndex = (nextIndex + caseSlides.length) % caseSlides.length;
+
+          caseSlides.forEach((slide, index) => {
+            const isActive = index === activeCaseIndex;
+            slide.hidden = !isActive;
+            slide.classList.toggle("is-active", isActive);
+
+            if (isActive) {
+              slide.querySelector(".case-gallery")?.scrollTo({ left: 0, behavior: "auto" });
+            }
+          });
+
+          caseDots.forEach((dot, index) => {
+            const isActive = index === activeCaseIndex;
+            dot.classList.toggle("is-active", isActive);
+            if (isActive) {
+              dot.setAttribute("aria-current", "true");
+            } else {
+              dot.removeAttribute("aria-current");
+            }
+          });
+
+          caseTagButtons.forEach((button, index) => {
+            const isActive = index === activeCaseIndex;
+            button.classList.toggle("is-active", isActive);
+            button.setAttribute("aria-pressed", String(isActive));
+          });
+        }
+
+        casePreviousButton.addEventListener("click", () => showCaseSlide(activeCaseIndex - 1));
+        caseNextButton.addEventListener("click", () => showCaseSlide(activeCaseIndex + 1));
+
+        caseDots.forEach((dot, index) => {
+          dot.addEventListener("click", () => showCaseSlide(index));
         });
-      });
+
+        caseTagButtons.forEach((button, index) => {
+          button.addEventListener("click", () => showCaseSlide(index));
+        });
+
+        caseCarousel.addEventListener("keydown", (event) => {
+          if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            showCaseSlide(activeCaseIndex - 1);
+          }
+
+          if (event.key === "ArrowRight") {
+            event.preventDefault();
+            showCaseSlide(activeCaseIndex + 1);
+          }
+        });
+      }
 
       const lightbox = document.querySelector("#caseLightbox");
       const lightboxImage = document.querySelector("#lightboxImage");
