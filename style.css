@@ -2320,3 +2320,93 @@ h1 {
 .risk-carousel-arrow {
   display: none; /* 僅針對電腦版隱藏，移除 <> 符號 */
 }
+/* ========================================= */
+/* ✨ AI 防詐小幫手 RWD 懸浮與隱藏頭部 (Hidden Header on Scroll) 設計優化方案 ✨ */
+/* ========================================= */
+
+/* 一、全站通用優化 (修復主體內容覆蓋問題) */
+
+/* 1. 修正前：主體內容被固定頭部覆蓋 */
+/* 2. 核心修正：對主體內容設定 Padding-Top */
+/* 3. 效益：將主體內容強制往下推，確保在未滑動時也能完整顯示不覆蓋 */
+body {
+  /* 👈 請設定與您電腦版 Header 相同的高度。 */
+  /* 如果您的 Header 是 72px，請設定為 72px。 */
+  padding-top: 72px; 
+}
+
+
+/* 二、手機版響應式設定：複合式隱藏 (小於 680px) */
+@media (max-width: 680px) {
+  
+  /* 1. 優化：將 body 內距設定為複合式 Header 的總高度 */
+  /* (假設 Logo 層 56px + 按鈕層 38px = 94px) */
+  body {
+    padding-top: 94px; 
+  }
+
+  /* 2. 設計修正：將頭部變成複合式結構 */
+  .site-header {
+    display: flex;
+    flex-direction: column; /* 👈 改為垂直排列 (Logo 在上、按鈕在下) */
+    position: fixed; 
+    top: 0;
+    width: 100%;
+    z-index: 30;
+    overflow: hidden; /* 隱藏 Logo 層 */
+  }
+
+  /* 3. 核心設計：精確定義兩層結構 */
+  
+  /* A. Logo 層：與 hamburger 共用這層 */
+  .brand,
+  .brand-logo {
+    display: flex;
+    flex-direction: row;
+    height: 56px; /* 👈 精確設定 Logo 層的高度 */
+    /* 核心滑順機制 */
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    transition: 
+      transform 0.3s ease-in-out,
+      opacity 0.3s ease-in-out,
+      visibility 0.3s ease-in-out; 
+  }
+
+  /* hamburger 同樣共用 Logo 層的滑順機制 */
+  .skip-link {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+
+  /* B. 按鈕層：要定版的四個按鈕 */
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    overflow-x: auto; /* 確保按鈕過多時可滑動 */
+    padding-bottom: 2px;
+    height: 38px; /* 👈 精確設定按鈕層的高度 */
+  }
+
+  .nav-links a {
+    min-height: auto;
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+
+  /* 4. 設計修正：複合式隱藏邏輯 */
+  /* 當 JavaScript 加入 .header-hidden 時，只隱藏 Logo 層 */
+  
+  .site-header.header-hidden .brand,
+  .site-header.header-hidden .skip-link {
+    /* 👈 將 Logo 層和 hamburger 滑出螢幕頂部 */
+    transform: translateY(-56px); 
+    opacity: 0;                   /* 變為透明 */
+    visibility: hidden;           /* 確保透明時不能被點擊 */
+  }
+}
