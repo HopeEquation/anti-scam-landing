@@ -2320,93 +2320,103 @@ h1 {
 .risk-carousel-arrow {
   display: none; /* 僅針對電腦版隱藏，移除 <> 符號 */
 }
-/* ========================================= */
-/* ✨ AI 防詐小幫手 RWD 懸浮與隱藏頭部 (Hidden Header on Scroll) 設計優化方案 ✨ */
-/* ========================================= */
+/* ==========================================================================
+   ✨ AI 防詐小幫手 RWD 懸浮與雙層複合式頭部完美解決方案
+   ========================================================================== */
 
-/* 一、全站通用優化 (修復主體內容覆蓋問題) */
-
-/* 1. 修正前：主體內容被固定頭部覆蓋 */
-/* 2. 核心修正：對主體內容設定 Padding-Top */
-/* 3. 效益：將主體內容強制往下推，確保在未滑動時也能完整顯示不覆蓋 */
+/* 一、電腦版全域優化 */
+/* 電腦版 Header 為 sticky (佔用排版空間)，因此 body 不需要 padding-top，避免出現空白縫隙 */
 body {
-  /* 👈 請設定與您電腦版 Header 相同的高度。 */
-  /* 如果您的 Header 是 72px，請設定為 72px。 */
-  padding-top: 72px; 
+  padding-top: 0 !important;
 }
 
-
-/* 二、手機版響應式設定：複合式隱藏 (小於 680px) */
+/* 二、手機版響應式設定：雙層複合式隱藏 (螢幕寬度小於 680px) */
 @media (max-width: 680px) {
   
-  /* 1. 優化：將 body 內距設定為複合式 Header 的總高度 */
-  /* (假設 Logo 層 56px + 按鈕層 38px = 94px) */
+  /* 1. 解決覆蓋問題：設定與手機版複合式 Header 相同高度的上邊距 (Logo 56px + 按鈕 40px = 96px) */
   body {
-    padding-top: 94px; 
+    padding-top: 96px !important; 
   }
 
-  /* 2. 設計修正：將頭部變成複合式結構 */
+  /* 2. 將 Header 設為固定定位，高度牢牢鎖定在雙層總和 96px */
   .site-header {
-    display: flex;
-    flex-direction: column; /* 👈 改為垂直排列 (Logo 在上、按鈕在下) */
-    position: fixed; 
+    position: fixed !important;  
     top: 0;
+    left: 0;
     width: 100%;
+    height: 96px; /* 👈 顯式宣告雙層總高度 */
     z-index: 30;
-    overflow: hidden; /* 隱藏 Logo 層 */
-  }
-
-  /* 3. 核心設計：精確定義兩層結構 */
-  
-  /* A. Logo 層：與 hamburger 共用這層 */
-  .brand,
-  .brand-logo {
     display: flex;
-    flex-direction: row;
-    height: 56px; /* 👈 精確設定 Logo 層的高度 */
-    /* 核心滑順機制 */
-    transform: translateY(0);
-    opacity: 1;
-    visibility: visible;
-    transition: 
-      transform 0.3s ease-in-out,
-      opacity 0.3s ease-in-out,
-      visibility 0.3s ease-in-out; 
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(18px) saturate(160%);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease-in-out; /* 👈 讓整條 Header 滾動時滑順位移 */
   }
 
-  /* hamburger 同樣共用 Logo 層的滑順機制 */
-  .skip-link {
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    transform: translateY(0);
-    opacity: 1;
+  /* 3. 重設手機版內部導覽結構，去除原本會撐開高度的內距、外距與 gap */
+  .nav {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: auto;
+    margin: 0;
+    gap: 0;
+    padding: 0;
   }
 
+  /* A. Logo 層：高度固定 56px，靠左對齊並留出呼吸空間 */
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 56px;
+    padding: 0 16px;
+  }
 
-  /* B. 按鈕層：要定版的四個按鈕 */
+  .brand-logo {
+    height: 36px; /* 手機版微調縮小 Logo 高度，比例更精緻 */
+    width: auto;
+  }
+
+  /* B. 按鈕層：高度固定 40px，在下方完美併排並提供極佳的點擊熱區 */
   .nav-links {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
-    overflow-x: auto; /* 確保按鈕過多時可滑動 */
-    padding-bottom: 2px;
-    height: 38px; /* 👈 精確設定按鈕層的高度 */
+    height: 40px;
+    padding: 0 8px;
+    overflow-x: auto; /* 按鈕過多時可橫向滑動 */
+    scrollbar-width: none; /* 隱藏 Firefox 捲軸 */
+    border-top: 1px solid rgba(0, 0, 0, 0.05); /* 輕微的頂部分隔線，劃分層級 */
+  }
+
+  .nav-links::-webkit-scrollbar {
+    display: none; /* 隱藏 Chrome/Safari 捲軸 */
   }
 
   .nav-links a {
+    flex: 1 0 auto;
     min-height: auto;
-    font-size: 15px;
-    font-weight: 500;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
+    color: #344054;
   }
 
+  /* 合作邀約 (CTA) 按鈕微調 */
+  .nav-links .nav-cta {
+    margin-left: 4px;
+    padding: 6px 12px;
+  }
 
-  /* 4. 設計修正：複合式隱藏邏輯 */
-  /* 當 JavaScript 加入 .header-hidden 時，只隱藏 Logo 層 */
-  
-  .site-header.header-hidden .brand,
-  .site-header.header-hidden .skip-link {
-    /* 👈 將 Logo 層和 hamburger 滑出螢幕頂部 */
-    transform: translateY(-56px); 
-    opacity: 0;                   /* 變為透明 */
-    visibility: hidden;           /* 確保透明時不能被點擊 */
+  /* 4. 滾動隱藏魔法：當向上滑動觸發時，將整條 Header 往上推 56px (剛好是 Logo 的高度) */
+  /* 這樣一來，Logo 就會滑出螢幕外，而下面的「4 個按鈕」會毫無縫隙地頂在頂部！ */
+  .site-header.header-hidden {
+    transform: translateY(-56px); /* 👈 只把 Logo 推上去，按鈕層定版留在頂部！ */
   }
 }
