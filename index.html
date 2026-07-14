@@ -73,7 +73,7 @@
               上傳聊天截圖，AI 防詐小幫手會分析對話中的高風險話術、冒名情境與可疑要求，提供清楚的風險提醒與下一步建議。
             </p>
             <div class="hero-actions">
-              <a class="btn btn-primary" href="https://lin.ee/wIxEnCH" target="_blank" rel="noopener">加入 AI 防詐小幫手</a>
+              <a class="btn btn-primary" href="https://lin.ee/wIxEnCH" target="_blank" rel="noopener">AI 防詐小幫手</a>
               <a class="btn btn-secondary" href="#partner">洽談合作</a>
               <a class="btn btn-secondary" href="#risk">服務特色</a>
             </div>
@@ -904,6 +904,28 @@
           closeLightbox();
         }
       });
+      /* ✨ 在 index.html 最底部的 <script> 貼上這一段代碼 */
+
+// 1. 找到頭部元素
+const header = document.querySelector('.site-header');
+let lastScrollY = window.scrollY; // 紀錄上一次的滾動位置
+
+// 2. 監聽視窗滾動事件
+window.addEventListener('scroll', () => {
+  const currentScrollY = window.scrollY; // 取得目前的滾動位置
+  
+  // 3. 判斷滾動方向：當前的滾動位置 > 上次的滾動位置，代表「向上滑動 (向下滾動網頁)」
+  if (currentScrollY > lastScrollY && currentScrollY > 72) {
+    // 👈 加上條件：currentScrollY > 72 (頭部高度大約 72px)，避免剛開始滾動就隱藏
+    header.classList.add('header-hidden'); // 加入隱藏的 CSS class
+  } else {
+    // 否則代表「向下滑動 (向上滾動網頁)」
+    header.classList.remove('header-hidden'); // 移除隱藏的 CSS class
+  }
+  
+  // 4. 更新上一次的滾動位置
+  lastScrollY = currentScrollY;
+});
     </script>
   </body>
 </html>
