@@ -329,6 +329,32 @@ h1 {
   font-size: 14px;
 }
 
+.hero-notice {
+  width: min(100% - 32px, var(--max));
+  margin: 14px auto 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.hero-notice-spaced {
+  margin-top: 28px;
+}
+
+.hero-notice a {
+  color: var(--button-primary-dark);
+  font-weight: 900;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.hero-notice a:hover,
+.hero-notice a:focus-visible {
+  color: var(--button-primary);
+  outline: none;
+}
+
 .section-head {
   display: flex;
   align-items: end;
@@ -470,7 +496,7 @@ h1 {
 .about-card {
   position: relative;
   display: flex;
-  min-height: 460px;
+  min-height: 450px;
   flex-direction: column;
   min-width: 0;
   overflow: hidden;
@@ -493,7 +519,7 @@ h1 {
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 18px;
+  padding: 30px 18px 18px;
 }
 
 .about-card h3 {
@@ -708,7 +734,10 @@ h1 {
 }
 
 .case-card-body {
+  display: flex;
   flex: 1;
+  flex-direction: column;
+  justify-content: center;
   padding: 24px 24px 18px;
   text-align: left;
 }
@@ -725,12 +754,14 @@ h1 {
 }
 
 .case-card h3 {
-  font-size: clamp(22px, 2.4vw, 28px);
+  font-size: clamp(28px, 3vw, 36px);
 }
 
 .case-card p {
-  margin: 12px 0 0;
+  margin: 18px 0 0;
   color: var(--muted);
+  font-size: clamp(18px, 1.8vw, 22px);
+  line-height: 1.75;
 }
 
 .case-gallery {
@@ -1560,24 +1591,41 @@ h1 {
 
 .footer-inner {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   gap: 16px;
   width: min(100% - 32px, var(--max));
   margin: 0 auto;
   font-size: 14px;
 }
 
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
 .footer-inner a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: #fce4ec;
   color: var(--primary-dark);
   font-weight: 800;
+  line-height: 1.3;
 }
 
 .footer-inner a:hover,
 .footer-inner a:focus-visible {
-  color: var(--primary);
+  background: #fce4ec;
+  color: #c94a76;
   outline: none;
-  text-decoration: underline;
-  text-underline-offset: 4px;
 }
 
 .statement-hero {
@@ -2003,7 +2051,7 @@ h1 {
   }
 
   .about-card {
-    min-height: 440px;
+    min-height: 430px;
   }
 
   .about-card img {
@@ -2144,6 +2192,12 @@ h1 {
   .footer-inner,
   .contact-row {
     flex-direction: column;
+  }
+
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .contact-row span {
