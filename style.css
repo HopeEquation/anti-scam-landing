@@ -22,6 +22,15 @@
 
 html {
   scroll-behavior: smooth;
+  /* 👈 電腦版 Header 高 72px，我們設定 90px，預留 18px 的精美呼吸空間 */
+  scroll-padding-top: 90px; 
+}
+
+@media (max-width: 680px) {
+  html {
+    /* 👈 手機版雙層 Header 高 108px，我們設定 124px，確保按鈕與標題不互撞 */
+    scroll-padding-top: 124px; 
+  }
 }
 
 body {
