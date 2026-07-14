@@ -1312,11 +1312,6 @@ h1 {
   transform: translateX(-50%);
 }
 
-.training-step-featured .training-step-number {
-  border-color: #2c5aa0;
-  background: #2c5aa0;
-  color: #fff;
-}
 
 .training-step-icon {
   width: 44px;
