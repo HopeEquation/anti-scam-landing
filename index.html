@@ -287,32 +287,53 @@
               <img src="img/mockup.png" alt="AI 防詐小幫手在 LINE 中顯示風險分析結果的操作示意" loading="lazy" />
             </div>
           </div>
-          <div class="risk-levels" aria-labelledby="risk-levels-title">
+          <div class="risk-levels" aria-labelledby="risk-levels-title" data-risk-carousel>
             <div class="risk-levels-head">
               <h3 id="risk-levels-title">五種風險等級圖例</h3>
               <p>AI 會依照訊息中的可疑程度給出不同等級，幫助使用者快速判斷是否需要停止互動、保留證據或尋求協助。</p>
             </div>
-            <div class="risk-grid">
-              <article class="risk-card">
-                <img src="img/Level%201%EF%BC%9A%E6%9A%AB%E7%84%A1%E7%95%B0%E7%8B%80.jpg" alt="Level 1 暫無異狀" loading="lazy" />
-                <span>Level 1：暫無異狀</span>
-              </article>
-              <article class="risk-card">
-                <img src="img/Level%202%EF%BC%9A%E4%BD%8E%E5%BA%A6%E9%A2%A8%E9%9A%AA%20.jpg" alt="Level 2 低度風險" loading="lazy" />
-                <span>Level 2：低度風險</span>
-              </article>
-              <article class="risk-card">
-                <img src="img/Level%203%EF%BC%9A%E4%B8%AD%E5%BA%A6%E9%A2%A8%E9%9A%AA.jpg" alt="Level 3 中度風險" loading="lazy" />
-                <span>Level 3：中度風險</span>
-              </article>
-              <article class="risk-card">
-                <img src="img/Level%204%EF%BC%9A%E9%AB%98%E5%BA%A6%E8%AD%A6%E6%88%92.jpg" alt="Level 4 高度警戒" loading="lazy" />
-                <span>Level 4：高度警戒</span>
-              </article>
-              <article class="risk-card">
-                <img src="img/Level%205%EF%BC%9A%E6%A5%B5%E5%BA%A6%E5%8D%B1%E9%9A%AA.jpg" alt="Level 5 極度危險" loading="lazy" />
-                <span>Level 5：極度危險</span>
-              </article>
+            <div class="risk-carousel">
+              <button class="risk-carousel-arrow" type="button" data-risk-prev aria-label="上一個風險等級">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m15 18-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+              <div class="risk-carousel-viewport">
+                <div class="risk-grid" aria-label="五種風險等級">
+                  <article class="risk-card risk-slide is-active" data-risk-slide>
+                    <img src="img/Level%201%EF%BC%9A%E6%9A%AB%E7%84%A1%E7%95%B0%E7%8B%80.jpg" alt="Level 1 暫無異狀" loading="lazy" />
+                    <span>Level 1：暫無異狀</span>
+                  </article>
+                  <article class="risk-card risk-slide" data-risk-slide>
+                    <img src="img/Level%202%EF%BC%9A%E4%BD%8E%E5%BA%A6%E9%A2%A8%E9%9A%AA%20.jpg" alt="Level 2 低度風險" loading="lazy" />
+                    <span>Level 2：低度風險</span>
+                  </article>
+                  <article class="risk-card risk-slide" data-risk-slide>
+                    <img src="img/Level%203%EF%BC%9A%E4%B8%AD%E5%BA%A6%E9%A2%A8%E9%9A%AA.jpg" alt="Level 3 中度風險" loading="lazy" />
+                    <span>Level 3：中度風險</span>
+                  </article>
+                  <article class="risk-card risk-slide" data-risk-slide>
+                    <img src="img/Level%204%EF%BC%9A%E9%AB%98%E5%BA%A6%E8%AD%A6%E6%88%92.jpg" alt="Level 4 高度警戒" loading="lazy" />
+                    <span>Level 4：高度警戒</span>
+                  </article>
+                  <article class="risk-card risk-slide" data-risk-slide>
+                    <img src="img/Level%205%EF%BC%9A%E6%A5%B5%E5%BA%A6%E5%8D%B1%E9%9A%AA.jpg" alt="Level 5 極度危險" loading="lazy" />
+                    <span>Level 5：極度危險</span>
+                  </article>
+                </div>
+              </div>
+              <button class="risk-carousel-arrow" type="button" data-risk-next aria-label="下一個風險等級">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="m9 18 6-6-6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </div>
+            <div class="risk-dots" aria-label="目前風險等級">
+              <button class="risk-dot is-active" type="button" data-risk-dot="0" aria-label="切換到 Level 1" aria-current="true"></button>
+              <button class="risk-dot" type="button" data-risk-dot="1" aria-label="切換到 Level 2"></button>
+              <button class="risk-dot" type="button" data-risk-dot="2" aria-label="切換到 Level 3"></button>
+              <button class="risk-dot" type="button" data-risk-dot="3" aria-label="切換到 Level 4"></button>
+              <button class="risk-dot" type="button" data-risk-dot="4" aria-label="切換到 Level 5"></button>
             </div>
           </div>
         </div>
@@ -347,8 +368,8 @@
               <p>
                 完整的防詐講師培訓課程，從最新詐騙趨勢、教材使用到課堂互動技巧，循序建立宣導能力。
               </p>
-              <div class="training-flow" aria-label="培訓流程四個步驟">
-                <article class="training-step">
+              <div class="training-flow" aria-label="培訓流程四個步驟" data-training-carousel>
+                <article class="training-step is-active" data-training-slide>
                   <div class="training-step-meta">
                     <span class="training-step-number">01</span>
                     <img class="training-step-icon" src="img/icon/chart.png" alt="" aria-hidden="true" loading="lazy">
@@ -361,7 +382,7 @@
                     <path d="M1 8h27m-6-6 7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </div>
-                <article class="training-step">
+                <article class="training-step" data-training-slide>
                   <div class="training-step-meta">
                     <span class="training-step-number">02</span>
                     <img class="training-step-icon" src="img/icon/fraud.png" alt="" aria-hidden="true" loading="lazy">
@@ -374,7 +395,7 @@
                     <path d="M1 8h27m-6-6 7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </div>
-                <article class="training-step">
+                <article class="training-step" data-training-slide>
                   <div class="training-step-meta">
                     <span class="training-step-number">03</span>
                     <img class="training-step-icon" src="img/icon/ppt.png" alt="" aria-hidden="true" loading="lazy">
@@ -387,7 +408,7 @@
                     <path d="M1 8h27m-6-6 7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </div>
-                <article class="training-step training-step-featured">
+                <article class="training-step training-step-featured" data-training-slide>
                   <div class="training-step-meta">
                     <span class="training-step-number">04</span>
                     <img class="training-step-icon" src="img/icon/school.png" alt="" aria-hidden="true" loading="lazy">
@@ -399,6 +420,12 @@
                     <li><strong>帶領互動防詐課程</strong></li>
                   </ul>
                 </article>
+              </div>
+              <div class="training-dots" aria-label="目前培訓流程步驟">
+                <button class="training-dot is-active" type="button" data-training-dot="0" aria-label="切換到培訓流程第 1 步" aria-current="true"></button>
+                <button class="training-dot" type="button" data-training-dot="1" aria-label="切換到培訓流程第 2 步"></button>
+                <button class="training-dot" type="button" data-training-dot="2" aria-label="切換到培訓流程第 3 步"></button>
+                <button class="training-dot" type="button" data-training-dot="3" aria-label="切換到培訓流程第 4 步"></button>
               </div>
             </section>
             <section class="volunteer-panel volunteer-pledge" aria-labelledby="pledge-title">
@@ -680,6 +707,186 @@
 
         caseGalleryReduceMotion.addEventListener("change", startCaseGalleryAutoPlay);
         startCaseGalleryAutoPlay();
+      }
+
+      const riskCarousel = document.querySelector("[data-risk-carousel]");
+
+      if (riskCarousel) {
+        const riskSlides = Array.from(riskCarousel.querySelectorAll("[data-risk-slide]"));
+        const riskPreviousButton = riskCarousel.querySelector("[data-risk-prev]");
+        const riskNextButton = riskCarousel.querySelector("[data-risk-next]");
+        const riskDots = Array.from(riskCarousel.querySelectorAll("[data-risk-dot]"));
+        const riskReduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const riskCarouselMedia = window.matchMedia("(max-width: 680px)");
+        const riskAutoPlayDelay = 3600;
+        let activeRiskIndex = 0;
+        let riskAutoPlayTimer = null;
+
+        function stopRiskAutoPlay() {
+          window.clearInterval(riskAutoPlayTimer);
+          riskAutoPlayTimer = null;
+        }
+
+        function startRiskAutoPlay() {
+          stopRiskAutoPlay();
+
+          if (!riskCarouselMedia.matches || riskReduceMotion.matches || riskSlides.length < 2) {
+            return;
+          }
+
+          riskAutoPlayTimer = window.setInterval(() => showRiskSlide(activeRiskIndex + 1), riskAutoPlayDelay);
+        }
+
+        function renderRiskSlides() {
+          riskSlides.forEach((slide, index) => {
+            const isActive = !riskCarouselMedia.matches || index === activeRiskIndex;
+            slide.hidden = riskCarouselMedia.matches && !isActive;
+            slide.classList.toggle("is-active", isActive);
+          });
+
+          riskDots.forEach((dot, index) => {
+            const isActive = index === activeRiskIndex;
+            dot.classList.toggle("is-active", isActive);
+            if (isActive) {
+              dot.setAttribute("aria-current", "true");
+            } else {
+              dot.removeAttribute("aria-current");
+            }
+          });
+        }
+
+        function showRiskSlide(nextIndex) {
+          activeRiskIndex = (nextIndex + riskSlides.length) % riskSlides.length;
+          renderRiskSlides();
+        }
+
+        function syncRiskCarouselMode() {
+          renderRiskSlides();
+          startRiskAutoPlay();
+        }
+
+        riskPreviousButton.addEventListener("click", () => {
+          showRiskSlide(activeRiskIndex - 1);
+          startRiskAutoPlay();
+        });
+
+        riskNextButton.addEventListener("click", () => {
+          showRiskSlide(activeRiskIndex + 1);
+          startRiskAutoPlay();
+        });
+
+        riskDots.forEach((dot, index) => {
+          dot.addEventListener("click", () => {
+            showRiskSlide(index);
+            startRiskAutoPlay();
+          });
+        });
+
+        riskCarousel.addEventListener("keydown", (event) => {
+          if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            showRiskSlide(activeRiskIndex - 1);
+            startRiskAutoPlay();
+          }
+
+          if (event.key === "ArrowRight") {
+            event.preventDefault();
+            showRiskSlide(activeRiskIndex + 1);
+            startRiskAutoPlay();
+          }
+        });
+
+        riskCarousel.addEventListener("pointerenter", stopRiskAutoPlay);
+        riskCarousel.addEventListener("pointerleave", startRiskAutoPlay);
+        riskCarousel.addEventListener("focusin", stopRiskAutoPlay);
+        riskCarousel.addEventListener("focusout", startRiskAutoPlay);
+        riskReduceMotion.addEventListener("change", startRiskAutoPlay);
+        riskCarouselMedia.addEventListener("change", syncRiskCarouselMode);
+        syncRiskCarouselMode();
+      }
+
+      const trainingCarousel = document.querySelector("[data-training-carousel]");
+
+      if (trainingCarousel) {
+        const trainingSlides = Array.from(trainingCarousel.querySelectorAll("[data-training-slide]"));
+        const trainingDots = Array.from(document.querySelectorAll("[data-training-dot]"));
+        const trainingReduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const trainingCarouselMedia = window.matchMedia("(max-width: 680px)");
+        const trainingAutoPlayDelay = 3600;
+        let activeTrainingIndex = 0;
+        let trainingAutoPlayTimer = null;
+
+        function stopTrainingAutoPlay() {
+          window.clearInterval(trainingAutoPlayTimer);
+          trainingAutoPlayTimer = null;
+        }
+
+        function startTrainingAutoPlay() {
+          stopTrainingAutoPlay();
+
+          if (!trainingCarouselMedia.matches || trainingReduceMotion.matches || trainingSlides.length < 2) {
+            return;
+          }
+
+          trainingAutoPlayTimer = window.setInterval(() => showTrainingSlide(activeTrainingIndex + 1), trainingAutoPlayDelay);
+        }
+
+        function renderTrainingSlides() {
+          trainingSlides.forEach((slide, index) => {
+            const isActive = !trainingCarouselMedia.matches || index === activeTrainingIndex;
+            slide.hidden = trainingCarouselMedia.matches && !isActive;
+            slide.classList.toggle("is-active", isActive);
+          });
+
+          trainingDots.forEach((dot, index) => {
+            const isActive = index === activeTrainingIndex;
+            dot.classList.toggle("is-active", isActive);
+            if (isActive) {
+              dot.setAttribute("aria-current", "true");
+            } else {
+              dot.removeAttribute("aria-current");
+            }
+          });
+        }
+
+        function showTrainingSlide(nextIndex) {
+          activeTrainingIndex = (nextIndex + trainingSlides.length) % trainingSlides.length;
+          renderTrainingSlides();
+        }
+
+        function syncTrainingCarouselMode() {
+          renderTrainingSlides();
+          startTrainingAutoPlay();
+        }
+
+        trainingDots.forEach((dot, index) => {
+          dot.addEventListener("click", () => {
+            showTrainingSlide(index);
+            startTrainingAutoPlay();
+          });
+        });
+
+        trainingCarousel.addEventListener("keydown", (event) => {
+          if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            showTrainingSlide(activeTrainingIndex - 1);
+            startTrainingAutoPlay();
+          }
+
+          if (event.key === "ArrowRight") {
+            event.preventDefault();
+            showTrainingSlide(activeTrainingIndex + 1);
+            startTrainingAutoPlay();
+          }
+        });
+
+        trainingCarousel.addEventListener("pointerenter", stopTrainingAutoPlay);
+        trainingCarousel.addEventListener("pointerleave", startTrainingAutoPlay);
+        trainingCarousel.addEventListener("focusin", stopTrainingAutoPlay);
+        trainingCarousel.addEventListener("focusout", startTrainingAutoPlay);
+        trainingReduceMotion.addEventListener("change", startTrainingAutoPlay);
+        trainingCarouselMedia.addEventListener("change", syncTrainingCarouselMode);
+        syncTrainingCarouselMode();
       }
 
       const lightbox = document.querySelector("#caseLightbox");
