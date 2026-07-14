@@ -2551,3 +2551,33 @@ body {
   transform: scale(0.96) !important;      /* 按下時微下陷反饋 */
   box-shadow: 0 10px 20px rgba(232, 93, 140, 0.1) !important;
 }
+/* ==========================================================================
+   ✨ 修正手機版「合作適用對象」：強制水平併排且標題絕對不換行
+   ========================================================================== */
+@media (max-width: 680px) {
+  
+  /* 1. 強制每一列保持「左右併排」(不垂直堆疊) */
+  .contact-box .contact-row {
+    display: flex !important;
+    flex-direction: row !important;       /* 👈 強制水平排列 */
+    justify-content: space-between !important; /* 👈 標題靠左、說明靠右 */
+    align-items: center !important;       /* 👈 上下垂直置中對齊 */
+    gap: 16px !important;                 /* 👈 縮小手機版左右間距 */
+    padding: 12px 0 !important;           /* 👈 稍微緊湊一點，更省空間 */
+  }
+
+  /* 2. 關鍵：防止「一般民眾、學校單位、企業組織、政府機關」這四個標題內部換行 */
+  .contact-row strong {
+    white-space: nowrap !important; /* 👈 核心：強制四個標題「絕對不換行」 */
+    flex-shrink: 0 !important;      /* 👈 核心：防止標題因為說明文字太長而被擠扁 */
+    font-size: 15px !important;     /* 👈 微調手機版標題字體大小 */
+  }
+
+  /* 3. 調整右側說明文字：右對齊，像表格一樣整齊 */
+  .contact-row span {
+    text-align: right !important;   /* 👈 手機版改為「靠右對齊」，視覺極致整齊 */
+    font-size: 13px !important;     /* 👈 稍微調小字體，確保小螢幕也能完美不破版 */
+    color: rgba(255, 255, 255, 0.85) !important; /* 👈 保持柔和的高對比度白色 */
+    line-height: 1.4 !important;
+  }
+}
