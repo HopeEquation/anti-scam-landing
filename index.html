@@ -915,7 +915,7 @@ window.addEventListener('scroll', () => {
   const currentScrollY = window.scrollY; // 取得目前的滾動位置
   
   // 3. 判斷滾動方向：當前的滾動位置 > 上次的滾動位置，代表「向上滑動 (向下滾動網頁)」
-  if (currentScrollY > lastScrollY && currentScrollY > 94) {
+  if (currentScrollY > lastScrollY && currentScrollY > 100) {
   // 👈 加上閾值：currentScrollY > 94 (複合式頭部的總高度)，避免剛開始滾動就切換
   header.classList.add('header-hidden'); // 加入隱藏的 CSS class
 } else {
