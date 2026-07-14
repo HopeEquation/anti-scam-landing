@@ -989,51 +989,81 @@ h1 {
   color: var(--muted);
 }
 
-.risk-carousel {
-  display: block;
-  margin-top: 22px;
-}
-
-.risk-carousel-viewport {
-  min-width: 0;
-}
-
-.risk-carousel-arrow {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border: 1px solid #fff;
-  border-radius: 999px;
-  background: #fff;
-  color: var(--primary-dark);
-  cursor: pointer;
-  box-shadow: 0 12px 26px rgba(22, 34, 51, 0.1);
-  transition:
-    background 180ms ease,
-    border-color 180ms ease,
-    box-shadow 180ms ease,
-    color 180ms ease;
-}
-
-.risk-carousel-arrow:hover,
-.risk-carousel-arrow:focus-visible {
-  border-color: #fff;
-  background: #fce4ec;
-  color: var(--button-primary-dark);
-  box-shadow: 0 18px 36px rgba(22, 34, 51, 0.18);
-  outline: 0;
-}
-
+/* 網頁版：依然保持原本精美的五欄網格排列，不輪播 */
 .risk-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 12px;
 }
 
-.risk-slide[hidden] {
-  display: none;
+.risk-card {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: 0 10px 22px rgba(22, 34, 51, 0.06);
+}
+
+.risk-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.risk-card span {
+  display: block;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+
+/* 手機版響應式設定：切換為淡入淡出輪播模式 */
+@media (max-width: 680px) {
+  .risk-carousel {
+    display: block;
+    margin-top: 22px;
+    position: relative; /* 讓子元素可以絕對定位在同一個點 */
+  }
+
+  .risk-carousel-viewport {
+    min-width: 0;
+  }
+
+  .risk-grid {
+    display: block; /* 在手機版取消 grid 排列 */
+    position: relative;
+    height: auto;
+    min-height: calc(100vw * 3 / 4 + 48px); /* 確保 viewport 高度不塌陷 */
+  }
+
+  .risk-slide {
+    position: absolute; /* 強制所有圖片貼在同一個位置 */
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    max-width: none;
+    background: #fff;
+    /* 核心滑順機制 */
+    opacity: 0;              /* 預設全部透明 */
+    visibility: hidden;      /* 確保透明時不能被點擊，不影響閱讀 */
+    transition: 
+      opacity 0.6s ease-in-out, /* 用 0.6 秒滑順地改變透明度 */
+      visibility 0.6s ease-in-out; 
+  }
+
+  /* 忽略原本的 [hidden]，我們改用更精細的 CSS 控制 */
+  .risk-slide[hidden] {
+    display: block; /* 確保圖片還在，能被我們控制 opacity */
+  }
+
+  /* 當圖片被加入 .is-active 時，執行淡入顯示 */
+  .risk-slide.is-active {
+    opacity: 1;              /* 變為不透明 */
+    visibility: visible;      /* 變為可見並可互動 */
+    z-index: 2;               /* 確保自己在最上層 */
+  }
 }
 
 .risk-card {
