@@ -761,7 +761,7 @@
         const riskDots = Array.from(riskCarousel.querySelectorAll("[data-risk-dot]"));
         const riskReduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
         const riskCarouselMedia = window.matchMedia("(max-width: 680px)");
-        const riskAutoPlayDelay = 3600;
+        const riskAutoPlayDelay = 1500;
         let activeRiskIndex = 0;
         let riskAutoPlayTimer = null;
 
@@ -786,7 +786,7 @@
 
           riskSlides.forEach((slide, index) => {
             const isActive = !riskCarouselMedia.matches || index === activeRiskIndex;
-            slide.hidden = riskCarouselMedia.matches && !isActive;
+            //slide.hidden = riskCarouselMedia.matches && !isActive;
             slide.classList.toggle("is-active", isActive);
           });
 
