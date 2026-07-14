@@ -2285,3 +2285,11 @@ h1 {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* ✨ 僅針對電腦版移除導覽箭頭，不影響手機版 */
+
+/* 在全域定義中，將箭頭設定為隱藏 */
+/* 因為電腦版 Grid 排列不需要手動輪播箭頭 */
+.risk-carousel-arrow {
+  display: none; /* 僅針對電腦版隱藏，移除 <> 符號 */
+}
