@@ -2475,3 +2475,79 @@ body {
     padding-top: 32px !important;      /* 👈 縮減關於我們上方的留白至 32px */
   }
 }
+/* ==========================================================================
+   ✨ 贊助按鈕（Sponsor Button）優雅呼吸微光與流光掠過（Shine Sweep）特效
+   ========================================================================== */
+
+/* 1. 核心設定：為贊助按鈕綁定「呼吸律動」動畫 */
+.volunteer-pledge .btn-glass {
+  position: relative !important;
+  overflow: hidden !important; /* 👈 確保流光不會溢出按鈕圓角邊框 */
+  
+  /* 綁定自動呼吸動畫：3 秒一次，無限循環 */
+  animation: sponsorPulse 3s infinite ease-in-out !important;
+}
+
+/* 2. 使用 ::after 虛擬元素製作一條半透明的「斜向白金流光」 */
+.volunteer-pledge .btn-glass::after {
+  content: "" !important;
+  position: absolute !important;
+  top: -50% !important;
+  left: -60% !important;
+  width: 30% !important;
+  height: 200% !important;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.65) 50%,
+    rgba(255, 255, 255, 0) 100%
+  ) !important;
+  transform: rotate(25deg) !important; /* 斜向折射角度 */
+  
+  /* 綁定流光閃爍動畫：4 秒一次，無限循環 */
+  animation: sponsorShine 4s infinite ease-in-out !important;
+  pointer-events: none !important; /* 確保流光不會阻擋滑鼠點擊 */
+}
+
+/* 3. 特效一：呼吸脈動動畫（Glow & Scale Pulse） */
+@keyframes sponsorPulse {
+  0% {
+    transform: scale(1);
+    /* 預設陰影 */
+    box-shadow: 0 16px 34px rgba(232, 93, 140, 0.14), 0 0 0 0 rgba(232, 93, 140, 0.4);
+  }
+  50% {
+    transform: scale(1.03); /* 微微膨脹 3%，製造呼吸感 */
+    /* 外圍渲染一層柔和的桃紅色光暈，並向外擴散 */
+    box-shadow: 0 20px 40px rgba(232, 93, 140, 0.22), 0 0 0 8px rgba(232, 93, 140, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 16px 34px rgba(232, 93, 140, 0.14), 0 0 0 0 rgba(232, 93, 140, 0);
+  }
+}
+
+/* 4. 特效二：流光掃掠動畫（Shine Sweep Effect） */
+@keyframes sponsorShine {
+  0% {
+    left: -60%; /* 起始點：隱藏在按鈕左側外 */
+  }
+  15% {
+    left: 130%; /* 快速在 0.6 秒內橫向掃過按鈕，產生耀眼折射 */
+  }
+  100% {
+    left: 130%; /* 剩餘時間保持靜止，定時循環一次，避免頻繁閃爍造成視覺疲勞 */
+  }
+}
+
+/* 5. 互動優化：當滑鼠懸停 (Hover) 或手指按壓時，暫停自動呼吸，專注於使用者的點擊回饋 */
+.volunteer-pledge .btn-glass:hover {
+  animation-play-state: paused !important; /* 暫停自動呼吸 */
+  transform: scale(1.05) !important;      /* 懸停時放大 5% */
+  box-shadow: 0 20px 42px rgba(232, 93, 140, 0.28) !important;
+}
+
+.volunteer-pledge .btn-glass:active {
+  transform: scale(0.96) !important;      /* 按下時微下陷反饋 */
+  box-shadow: 0 10px 20px rgba(232, 93, 140, 0.1) !important;
+}
