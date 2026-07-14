@@ -1982,7 +1982,9 @@ h1 {
   }
 
   .training-flow {
-    display: block;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 40px;
     overflow-x: visible;
     padding: 44px 2px 0;
     scroll-snap-type: none;
@@ -1990,12 +1992,10 @@ h1 {
 
   .training-step {
     max-width: min(100%, 520px);
+    width: 100%;
     margin-inline: auto;
-    min-height: 300px;
-  }
-
-  .training-step[hidden] {
-    display: none;
+    min-height: auto;
+    padding-bottom: 22px;
   }
 
   .training-flow-arrow {
@@ -2003,7 +2003,7 @@ h1 {
   }
 
   .training-dots {
-    display: flex;
+    display: none;
   }
 
   .nav {
