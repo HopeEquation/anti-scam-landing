@@ -1021,6 +1021,28 @@ h1 {
 
 /* 手機版響應式設定：切換為淡入淡出輪播模式 */
 @media (max-width: 680px) {
+  /* ✨ 請將這一段加在手機版 Media Query 內 👇 */
+  .site-header {
+    /* 1. 核心修正：將 position 改為固定，方便過渡動畫控制 */
+    position: fixed; 
+    width: 100%;
+    
+    /* 2. 核心設定：加上平滑的過渡動畫，時間設為 0.3 秒，增加流暢度 */
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; 
+    
+    /* 確保初始狀態是顯示的 */
+    transform: translateY(0);
+    opacity: 1;
+    z-index: 30; /* 確保自己還在網頁內容上方 */
+  }
+
+  /* 當 JavaScript 加入 .header-hidden 時，執行隱藏動畫 */
+  .site-header.header-hidden {
+    /* 👈 將自己滑出螢幕頂部，移動距離大約是頭部的高度 */
+    transform: translateY(-100%); 
+    opacity: 0;                   /* 變為透明 */
+  }
+}
   .risk-carousel {
     display: block;
     margin-top: 22px;
