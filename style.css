@@ -2321,7 +2321,7 @@ h1 {
   display: none; /* 僅針對電腦版隱藏，移除 <> 符號 */
 }
 /* ==========================================================================
-   ✨ AI 防詐小幫手 RWD 懸浮與雙層複合式頭部完美解決方案 (含 Logo 放大)
+   ✨ AI 防詐小幫手 RWD 懸浮與雙層複合式頭部完美解決方案 (使用 top 位移，含 Logo 放大)
    ========================================================================== */
 
 /* 一、全站通用與電腦版優化 */
@@ -2334,7 +2334,7 @@ h1 {
   object-position: left center;
 }
 
-/* 2. 電腦版 Header 為 sticky (已佔用排版空間)，因此 body 不需要 padding-top，避免出現空白縫隙 */
+/* 2. 電腦版 Header 預設為 sticky (已佔用排版空間)，因此 body 不需要 padding-top，避免出現空白縫隙 */
 body {
   padding-top: 0 !important;
 }
@@ -2348,21 +2348,22 @@ body {
     padding-top: 100px !important; 
   }
 
-  /* 2. 將整個 Header 設為固定定位，高度牢牢鎖定在 100px */
+  /* 2. 將整個 Header 設為固定定位，高度鎖定在 100px */
   .site-header {
     position: fixed !important;  
-    top: 0;
+    top: 0; /* 👈 透過 top 控制顯示/隱藏，在手機瀏覽器上最為穩定 */
     left: 0;
     width: 100%;
-    height: 100px; /* 👈 顯式宣告雙層總高度 */
+    height: 100px !important; /* 👈 顯示宣告雙層總高度 */
     z-index: 30;
     display: flex;
     flex-direction: column;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(18px) saturate(160%);
     border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     overflow: hidden;
-    transition: transform 0.3s ease-in-out; /* 👈 讓整條 Header 滾動時平滑移位 */
+    transition: top 0.3s ease-in-out !important; /* 👈 監聽 top 屬性的平滑過渡 */
+    transform: none !important; /* 👈 清除所有 transform，避免 iOS Safari 產生固定定位失效的 Bug */
   }
 
   /* 3. 重設手機版內部導覽結構，去除原本會撐開高度的內距、外距與 gap */
@@ -2386,11 +2387,14 @@ body {
     height: 60px !important;
     padding: 0 16px !important;
     margin: 0 !important;
+    transform: none !important; /* 清除子元素位移 */
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 
-  /* 📱 手機版 Logo 圖片放大：高度從原本的 36px 大幅提升至 45px，清晰度與辨識度大幅提升！ */
+  /* 📱 手機版 Logo 圖片放大：高度拉大至 46px，字體和小桃隊長精緻熊頭更清晰！ */
   .brand-logo {
-    height: 45px !important; 
+    height: 46px !important; 
     width: auto !important;
     max-width: 80% !important;
   }
@@ -2405,10 +2409,10 @@ body {
     height: 40px !important;
     padding: 0 8px !important;
     margin: 0 !important;
-    overflow-x: auto !important; /* 按鈕過多時可橫向滑動 */
+    overflow-x: auto !important; /* 確保按鈕過多時可橫向滑動 */
     scrollbar-width: none;       /* 隱藏 Firefox 捲軸 */
-    border-top: 1px solid rgba(0, 0, 0, 0.05); /* 輕微的頂部分隔線，劃分層級 */
-    background: rgba(255, 255, 255, 0.95);    /* 確保 Logo 隱藏後，按鈕層有底色不透過去 */
+    border-top: 1px solid rgba(0, 0, 0, 0.05); /* 輕微分隔線 */
+    background: rgba(255, 255, 255, 0.96);    /* 確保 Logo 隱藏後，按鈕層底色不透光 */
   }
 
   .nav-links::-webkit-scrollbar {
@@ -2436,9 +2440,10 @@ body {
     border-radius: var(--radius) !important;
   }
 
-  /* 4. 滾動隱藏魔法：當向上滑動時，直接將「整條 Header」往上推 60px (剛好是 Logo 的高度) */
-  /* 如此一來，Logo 會完美退場，而下方的按鈕層會分毫不差地、定版卡在螢幕最上方！ */
+  /* 4. 滾動隱藏：向上滑動時，直接將「整條 Header」往上推 60px (剛好是 Logo 的高度) */
+  /* 這時 Header 的 top 變為 -60px，下方的按鈕層 (y: 60px ~ 100px) 就會完美卡在螢幕最頂端 (y: 0px ~ 40px)！ */
   .site-header.header-hidden {
-    transform: translateY(-60px) !important; 
+    top: -60px !important; 
+    transform: none !important;
   }
 }
