@@ -1365,6 +1365,8 @@ h1 {
   padding: 0;
   list-style: none;
   text-align: left;
+  align-self: center; /* 將整個列表區塊在 Flex 父容器中水平置中 */
+  margin-top: 0;      /* 確保沒有不必要的上邊距 (視原本margin設定決定) */
 }
 
 .training-outcome-list li {
