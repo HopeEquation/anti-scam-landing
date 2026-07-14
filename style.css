@@ -2321,7 +2321,7 @@ h1 {
   display: none; /* 僅針對電腦版隱藏，移除 <> 符號 */
 }
 /* ==========================================================================
-   ✨ AI 防詐小幫手 RWD 雙層複合式頭部 - 終極修正與手機互動效果版
+   ✨ AI 防詐小幫手 RWD 雙層複合式頭部 - 終極修正與手指觸控寬裕版
    ========================================================================== */
 
 /* 一、全站通用與電腦版優化 */
@@ -2334,27 +2334,27 @@ h1 {
   object-position: left center;
 }
 
-/* 2. 電腦版 Header 預設為 sticky (已佔用排版空間)，因此 body 不需要 padding-top */
+/* 2. 電腦版 Header 預設為 sticky，因此 body 不需要 padding-top，避免出現空白縫隙 */
 body {
   padding-top: 0 !important;
 }
 
 
-/* 二、手機版響應式設定：雙層複合式隱藏與按鈕互動 (螢幕寬度小於 680px) */
+/* 二、手機版響應式設定：雙層複合式隱藏、放大觸控區 (螢幕寬度小於 680px) */
 @media (max-width: 680px) {
   
-  /* 1. 解決覆蓋問題：設定與手機版複合式 Header 相同高度的上邊距 */
+  /* 1. 解決覆蓋問題：設定與手機版複合式 Header 相同高度的上邊距 (Logo層 60px + 按鈕層 48px = 108px) */
   body {
-    padding-top: 100px !important; 
+    padding-top: 108px !important; 
   }
 
-  /* 2. 將整個 Header 設為固定定位，高度鎖定在 100px */
+  /* 2. 將整個 Header 設為固定定位，高度鎖定在 108px */
   .site-header {
     position: fixed !important;  
     top: 0 !important;
     left: 0 !important;
     width: 100% !important;
-    height: 100px !important;
+    height: 108px !important; /* 👈 調整為 108px，給按鈕更多垂直呼吸空間 */
     z-index: 99 !important;
     display: flex !important;
     flex-direction: column !important;
@@ -2393,21 +2393,20 @@ body {
     visibility: visible !important;
   }
 
-  /* 手機版 Logo 圖片 */
   .brand-logo {
     height: 46px !important; 
     width: auto !important;
     max-width: 80% !important;
   }
 
-  /* B. 按鈕層：高度固定 40px，在下方完美併排 */
+  /* B. 按鈕層：高度從 40px 增加至 48px！ */
   .nav-links {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: space-between !important;
     width: 100% !important;
-    height: 40px !important;
+    height: 48px !important; /* 👈 增加至 48px 金牌觸控高度 */
     padding: 0 8px !important;
     margin: 0 !important;
     overflow-x: auto !important;
@@ -2420,39 +2419,38 @@ body {
     display: none !important;
   }
 
-  /* 📱 手機版四個按鈕基礎樣式：加入互動過渡時間 */
+  /* 📱 手機版四個按鈕：上下 Padding 從 6px 加大到 10px！點擊更靈敏 */
   .nav-links a {
     flex: 1 0 auto !important;
     min-height: auto !important;
-    padding: 6px 10px !important;
+    padding: 10px 10px !important; /* 👈 上下內距加大到 10px，完美擴展觸控感應區 */
     font-size: 14px !important;
     font-weight: 700 !important;
     text-align: center !important;
     color: #344054 !important;
     background: transparent !important;
-    border-radius: 6px !important; /* 👈 改為小圓角膠囊，方便顯現互動背景 */
+    border-radius: 6px !important;
     transition: 
       background-color 150ms ease, 
       color 150ms ease, 
-      transform 100ms ease-out !important; /* 👈 增加點擊反饋時間 */
+      transform 100ms ease-out !important;
   }
 
-  /* 📱 互動效果一：一般按鈕（關於我們、常見案例、講師招募）點擊與按壓反饋 */
+  /* 📱 一般按鈕按壓反饋 */
   .nav-links a:not(.nav-cta):active {
-    background-color: rgba(232, 93, 140, 0.1) !important; /* 👈 按壓時亮起溫暖粉紅背景 */
-    color: var(--primary) !important;                    /* 👈 字體變為桃紅色 */
-    transform: scale(0.95) !important;                     /* 👈 按壓時微下陷，產生點擊反饋 */
+    background-color: rgba(232, 93, 140, 0.1) !important;
+    color: var(--primary) !important;
+    transform: scale(0.95) !important;
   }
 
-  /* 在桌機模擬手機版瀏覽時的 Hover 狀態 */
   .nav-links a:not(.nav-cta):hover {
     color: var(--primary) !important;
   }
 
-  /* 📱 互動效果二：合作邀約 (CTA) 右側亮粉紅按鈕 */
+  /* 📱 合作邀約 (CTA) 按鈕上下留白同步加大 */
   .nav-links .nav-cta {
     margin-left: 4px !important;
-    padding: 6px 12px !important;
+    padding: 10px 12px !important; /* 👈 同步改為上下 10px，確保視覺水平高度齊平 */
     background: var(--button-primary) !important;
     color: #fff !important;
     border-radius: var(--radius) !important;
@@ -2461,8 +2459,8 @@ body {
 
   /* 合作邀約按鈕按壓反饋 */
   .nav-links .nav-cta:active {
-    background-color: var(--button-primary-dark) !important; /* 👈 按壓時桃紅加深 */
-    transform: scale(0.93) !important;                        /* 👈 下陷反饋比一般按鈕更明顯 */
+    background-color: var(--button-primary-dark) !important;
+    transform: scale(0.93) !important;
     box-shadow: 0 2px 4px rgba(232, 93, 140, 0.1) !important;
     color: #fff !important;
   }
@@ -2471,7 +2469,7 @@ body {
     color: #fff !important;
   }
 
-  /* 4. 滾動隱藏 */
+  /* 4. 滾動隱藏：向上滑動時，將整條 Header 往上推 60px，按鈕層 (高 48px) 依舊完美頂格貼齊 */
   .site-header.header-hidden {
     top: -60px !important; 
     opacity: 1 !important;
