@@ -470,7 +470,7 @@ h1 {
 .about-card {
   position: relative;
   display: flex;
-  min-height: 460px;
+  min-height: 450px;
   flex-direction: column;
   min-width: 0;
   overflow: hidden;
@@ -493,7 +493,7 @@ h1 {
   display: flex;
   flex: 1;
   flex-direction: column;
-  padding: 18px;
+  padding: 30px 18px 18px;
 }
 
 .about-card h3 {
@@ -731,6 +731,13 @@ h1 {
 .case-card p {
   margin: 12px 0 0;
   color: var(--muted);
+}
+
+.case-card-illustration {
+  align-self: flex-end;
+  width: min(320px, 90%);
+  margin: auto 0 0;
+  object-fit: contain;
 }
 
 .case-gallery {
@@ -2003,7 +2010,7 @@ h1 {
   }
 
   .about-card {
-    min-height: 440px;
+    min-height: 430px;
   }
 
   .about-card img {
@@ -2101,6 +2108,10 @@ h1 {
     flex: 1;
     padding: 20px 18px 10px;
     text-align: left;
+  }
+
+  .case-card-illustration {
+    display: none;
   }
 
   .case-gallery {
