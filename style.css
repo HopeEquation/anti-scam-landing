@@ -2229,16 +2229,20 @@ h1 {
     max-height: calc(86dvh - 64px);
   }
 
-  .footer-inner,
-  .contact-row {
+.footer-inner {
     flex-direction: column;
+    gap: 16px;
   }
 
-  .footer-links {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  /* 針對按鈕區塊，強制改為水平併排，並且自動置中 */
+  .site-footer .footer-links {
+    display: flex;
+    flex-direction: row;      /* 👈 改為 row，按鈕就會在手機版水平併排 */
+    flex-wrap: wrap;          /* 確保按鈕在極窄螢幕上能優雅換行，不破版 */
+    justify-content: center;  /* 按鈕整體水平置中 */
+    gap: 8px;                 /* 設定按鈕之間的間距 */
   }
+}
 
   .contact-row span {
     text-align: left;
