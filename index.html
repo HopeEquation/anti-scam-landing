@@ -412,8 +412,8 @@
               <p>
                 完整的防詐講師培訓課程，從最新詐騙趨勢、教材使用到課堂互動技巧，循序建立宣導能力。
               </p>
-              <div class="training-flow" aria-label="培訓流程四個步驟" data-training-carousel>
-                <article class="training-step is-active" data-training-slide>
+              <div class="training-flow" aria-label="培訓流程四個步驟">
+                <article class="training-step">
                   <div class="training-step-meta">
                     <span class="training-step-number">01</span>
                     <img class="training-step-icon" src="img/icon/chart.png" alt="" aria-hidden="true" loading="lazy">
@@ -426,7 +426,7 @@
                     <path d="M1 8h27m-6-6 7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </div>
-                <article class="training-step" data-training-slide>
+                <article class="training-step">
                   <div class="training-step-meta">
                     <span class="training-step-number">02</span>
                     <img class="training-step-icon" src="img/icon/fraud.png" alt="" aria-hidden="true" loading="lazy">
@@ -439,7 +439,7 @@
                     <path d="M1 8h27m-6-6 7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </div>
-                <article class="training-step" data-training-slide>
+                <article class="training-step">
                   <div class="training-step-meta">
                     <span class="training-step-number">03</span>
                     <img class="training-step-icon" src="img/icon/ppt.png" alt="" aria-hidden="true" loading="lazy">
@@ -452,7 +452,7 @@
                     <path d="M1 8h27m-6-6 7 6-7 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                 </div>
-                <article class="training-step training-step-featured" data-training-slide>
+                <article class="training-step training-step-featured">
                   <div class="training-step-meta">
                     <span class="training-step-number">04</span>
                     <img class="training-step-icon" src="img/icon/school.png" alt="" aria-hidden="true" loading="lazy">
@@ -464,12 +464,6 @@
                     <li><strong>帶領互動防詐課程</strong></li>
                   </ul>
                 </article>
-              </div>
-              <div class="training-dots" aria-label="目前培訓流程步驟">
-                <button class="training-dot is-active" type="button" data-training-dot="0" aria-label="切換到培訓流程第 1 步" aria-current="true"></button>
-                <button class="training-dot" type="button" data-training-dot="1" aria-label="切換到培訓流程第 2 步"></button>
-                <button class="training-dot" type="button" data-training-dot="2" aria-label="切換到培訓流程第 3 步"></button>
-                <button class="training-dot" type="button" data-training-dot="3" aria-label="切換到培訓流程第 4 步"></button>
               </div>
             </section>
             <section class="volunteer-panel volunteer-pledge" aria-labelledby="pledge-title">
@@ -854,90 +848,6 @@
         riskReduceMotion.addEventListener("change", startRiskAutoPlay);
         riskCarouselMedia.addEventListener("change", syncRiskCarouselMode);
         syncRiskCarouselMode();
-      }
-
-      const trainingCarousel = document.querySelector("[data-training-carousel]");
-
-      if (trainingCarousel) {
-        const trainingSlides = Array.from(trainingCarousel.querySelectorAll("[data-training-slide]"));
-        const trainingDots = Array.from(document.querySelectorAll("[data-training-dot]"));
-        const trainingReduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-        const trainingCarouselMedia = window.matchMedia("(max-width: 680px)");
-        const trainingAutoPlayDelay = 3600;
-        let activeTrainingIndex = 0;
-        let trainingAutoPlayTimer = null;
-
-        function stopTrainingAutoPlay() {
-          window.clearInterval(trainingAutoPlayTimer);
-          trainingAutoPlayTimer = null;
-        }
-
-        function startTrainingAutoPlay() {
-          stopTrainingAutoPlay();
-
-          if (!trainingCarouselMedia.matches || trainingReduceMotion.matches || trainingSlides.length < 2) {
-            return;
-          }
-
-          trainingAutoPlayTimer = window.setInterval(() => showTrainingSlide(activeTrainingIndex + 1), trainingAutoPlayDelay);
-        }
-
-        function renderTrainingSlides() {
-          trainingSlides.forEach((slide, index) => {
-            const isActive = !trainingCarouselMedia.matches || index === activeTrainingIndex;
-            slide.hidden = trainingCarouselMedia.matches && !isActive;
-            slide.classList.toggle("is-active", isActive);
-          });
-
-          trainingDots.forEach((dot, index) => {
-            const isActive = index === activeTrainingIndex;
-            dot.classList.toggle("is-active", isActive);
-            if (isActive) {
-              dot.setAttribute("aria-current", "true");
-            } else {
-              dot.removeAttribute("aria-current");
-            }
-          });
-        }
-
-        function showTrainingSlide(nextIndex) {
-          activeTrainingIndex = (nextIndex + trainingSlides.length) % trainingSlides.length;
-          renderTrainingSlides();
-        }
-
-        function syncTrainingCarouselMode() {
-          renderTrainingSlides();
-          startTrainingAutoPlay();
-        }
-
-        trainingDots.forEach((dot, index) => {
-          dot.addEventListener("click", () => {
-            showTrainingSlide(index);
-            startTrainingAutoPlay();
-          });
-        });
-
-        trainingCarousel.addEventListener("keydown", (event) => {
-          if (event.key === "ArrowLeft") {
-            event.preventDefault();
-            showTrainingSlide(activeTrainingIndex - 1);
-            startTrainingAutoPlay();
-          }
-
-          if (event.key === "ArrowRight") {
-            event.preventDefault();
-            showTrainingSlide(activeTrainingIndex + 1);
-            startTrainingAutoPlay();
-          }
-        });
-
-        trainingCarousel.addEventListener("pointerenter", stopTrainingAutoPlay);
-        trainingCarousel.addEventListener("pointerleave", startTrainingAutoPlay);
-        trainingCarousel.addEventListener("focusin", stopTrainingAutoPlay);
-        trainingCarousel.addEventListener("focusout", startTrainingAutoPlay);
-        trainingReduceMotion.addEventListener("change", startTrainingAutoPlay);
-        trainingCarouselMedia.addEventListener("change", syncTrainingCarouselMode);
-        syncTrainingCarouselMode();
       }
 
       const lightbox = document.querySelector("#caseLightbox");
