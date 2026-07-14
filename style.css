@@ -1615,16 +1615,18 @@ h1 {
   padding: 8px 14px;
   border: 0;
   border-radius: 999px;
-  background: #fce4ec;
-  color: var(--primary-dark);
+  background: #0a355c;        /* 改為你專案定義的深藍色 (或寫 var(--primary-dark)) */
+  color: #ffffff;             /* 字體改為純白色 */
   font-weight: 800;
   line-height: 1.3;
+  transition: background 0.2s ease, transform 0.2s ease; /* 讓滑鼠移上去的過渡效果更平滑 */
 }
 
 .footer-inner a:hover,
 .footer-inner a:focus-visible {
-  background: #fce4ec;
-  color: #c94a76;
+  background: #1e40af;        /* 滑鼠移上去時，變為稍微亮一點的藍色，提升點擊感 */
+  color: #ffffff;             /* 保持白色字體 */
+  transform: translateY(-1px); /* 微幅向上飄浮，增加現代感 */
   outline: none;
 }
 
