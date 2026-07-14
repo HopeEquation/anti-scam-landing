@@ -2464,18 +2464,18 @@ body {
    ========================================================================== */
 @media (min-width: 681px) {
   
-  /* 1. 縮減 Hero 區塊的底部內縮 (從原先的 48px 縮減至 12px) */
+  /* 1. 縮減 Hero 區塊的底部內縮 (從原先的 48px 縮減至精緻的 12px) */
   .hero {
     padding-bottom: 12px !important;
   }
 
-  /* 2. 消除 165 提示段落預設的瀏覽器下方外距，避免空間失控 */
+  /* 2. 消除 165 提示段落可能產生的下方外距，避免空間失控 */
   .hero-notice-spaced {
     margin-bottom: 0 !important;
   }
 
-  /* 3. 縮減「關於我們」區塊頂部的內縮 (從原本高達 96px 縮減至舒適的 48px) */
+  /* 3. 縮減「關於我們」區塊頂部的內縮 (從原本高達 96px 縮減至舒適的 40px) */
   .about {
-    padding-top: 48px !important;
+    padding-top: 40px !important;
   }
 }
