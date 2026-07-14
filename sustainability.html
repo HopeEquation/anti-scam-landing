@@ -89,19 +89,24 @@
                 <h2>對應永續目標</h2>
               </div>
             </div>
-            <div class="sdg-grid" aria-label="對應聯合國永續發展目標">
-              <figure class="sdg-item">
+            <div class="sdg-grid" aria-label="對應聯合國永續發展目標" data-sdg-carousel>
+              <figure class="sdg-item is-active" data-sdg-slide>
                 <img src="img/SDG5.jpg" alt="SDG 5 性別平等" loading="lazy" />
                 <figcaption><strong>SDG 5 性別平等</strong><span>支持二度就業女性重新取得數位能力、工作機會與經濟收入。</span></figcaption>
               </figure>
-              <figure class="sdg-item">
+              <figure class="sdg-item" data-sdg-slide>
                 <img src="img/SDG8.jpg" alt="SDG 8 尊嚴勞動與經濟成長" loading="lazy" />
                 <figcaption><strong>SDG 8 尊嚴勞動</strong><span>透過防詐講師培力，創造兼具社會價值與尊嚴收入的工作模式。</span></figcaption>
               </figure>
-              <figure class="sdg-item">
+              <figure class="sdg-item" data-sdg-slide>
                 <img src="img/SDG16.jpg" alt="SDG 16 和平正義與健全制度" loading="lazy" />
                 <figcaption><strong>SDG 16 和平正義與健全制度</strong><span>以識詐教育與 AI 工具降低詐騙風險，補強社區安全防護網。</span></figcaption>
               </figure>
+            </div>
+            <div class="sdg-dots" aria-label="目前永續目標">
+              <button class="sdg-dot is-active" type="button" data-sdg-dot="0" aria-label="切換到 SDG 5" aria-current="true"></button>
+              <button class="sdg-dot" type="button" data-sdg-dot="1" aria-label="切換到 SDG 8"></button>
+              <button class="sdg-dot" type="button" data-sdg-dot="2" aria-label="切換到 SDG 16"></button>
             </div>
           </article>
         </div>
@@ -114,5 +119,90 @@
         <a href="index.html">返回首頁</a>
       </div>
     </footer>
+    <script>
+      const sdgCarousel = document.querySelector("[data-sdg-carousel]");
+
+      if (sdgCarousel) {
+        const sdgSlides = Array.from(sdgCarousel.querySelectorAll("[data-sdg-slide]"));
+        const sdgDots = Array.from(document.querySelectorAll("[data-sdg-dot]"));
+        const sdgReduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const sdgCarouselMedia = window.matchMedia("(max-width: 680px)");
+        const sdgAutoPlayDelay = 3600;
+        let activeSdgIndex = 0;
+        let sdgAutoPlayTimer = null;
+
+        function stopSdgAutoPlay() {
+          window.clearInterval(sdgAutoPlayTimer);
+          sdgAutoPlayTimer = null;
+        }
+
+        function startSdgAutoPlay() {
+          stopSdgAutoPlay();
+
+          if (!sdgCarouselMedia.matches || sdgReduceMotion.matches || sdgSlides.length < 2) {
+            return;
+          }
+
+          sdgAutoPlayTimer = window.setInterval(() => showSdgSlide(activeSdgIndex + 1), sdgAutoPlayDelay);
+        }
+
+        function renderSdgSlides() {
+          sdgSlides.forEach((slide, index) => {
+            const isActive = !sdgCarouselMedia.matches || index === activeSdgIndex;
+            slide.hidden = sdgCarouselMedia.matches && !isActive;
+            slide.classList.toggle("is-active", isActive);
+          });
+
+          sdgDots.forEach((dot, index) => {
+            const isActive = index === activeSdgIndex;
+            dot.classList.toggle("is-active", isActive);
+            if (isActive) {
+              dot.setAttribute("aria-current", "true");
+            } else {
+              dot.removeAttribute("aria-current");
+            }
+          });
+        }
+
+        function showSdgSlide(nextIndex) {
+          activeSdgIndex = (nextIndex + sdgSlides.length) % sdgSlides.length;
+          renderSdgSlides();
+        }
+
+        function syncSdgCarouselMode() {
+          renderSdgSlides();
+          startSdgAutoPlay();
+        }
+
+        sdgDots.forEach((dot, index) => {
+          dot.addEventListener("click", () => {
+            showSdgSlide(index);
+            startSdgAutoPlay();
+          });
+        });
+
+        sdgCarousel.addEventListener("keydown", (event) => {
+          if (event.key === "ArrowLeft") {
+            event.preventDefault();
+            showSdgSlide(activeSdgIndex - 1);
+            startSdgAutoPlay();
+          }
+
+          if (event.key === "ArrowRight") {
+            event.preventDefault();
+            showSdgSlide(activeSdgIndex + 1);
+            startSdgAutoPlay();
+          }
+        });
+
+        sdgCarousel.addEventListener("pointerenter", stopSdgAutoPlay);
+        sdgCarousel.addEventListener("pointerleave", startSdgAutoPlay);
+        sdgCarousel.addEventListener("focusin", stopSdgAutoPlay);
+        sdgCarousel.addEventListener("focusout", startSdgAutoPlay);
+        sdgReduceMotion.addEventListener("change", startSdgAutoPlay);
+        sdgCarouselMedia.addEventListener("change", syncSdgCarouselMode);
+        syncSdgCarouselMode();
+      }
+    </script>
   </body>
 </html>

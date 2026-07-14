@@ -1026,15 +1026,19 @@ h1 {
   font-weight: 800;
 }
 
-.risk-dots {
+.risk-dots,
+.training-dots,
+.sdg-dots {
   display: none;
   align-items: center;
   justify-content: center;
   gap: 2px;
-  margin-top: 18px;
+  margin-top: 16px;
 }
 
-.risk-dot {
+.risk-dot,
+.training-dot,
+.sdg-dot {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1045,7 +1049,9 @@ h1 {
   cursor: pointer;
 }
 
-.risk-dot::before {
+.risk-dot::before,
+.training-dot::before,
+.sdg-dot::before {
   content: "";
   width: 12px;
   height: 12px;
@@ -1057,12 +1063,18 @@ h1 {
 }
 
 .risk-dot:hover,
-.risk-dot:focus-visible {
+.risk-dot:focus-visible,
+.training-dot:hover,
+.training-dot:focus-visible,
+.sdg-dot:hover,
+.sdg-dot:focus-visible {
   outline: 3px solid rgba(232, 93, 140, 0.24);
   outline-offset: 4px;
 }
 
-.risk-dot.is-active::before {
+.risk-dot.is-active::before,
+.training-dot.is-active::before,
+.sdg-dot.is-active::before {
   width: 28px;
   background: var(--button-primary);
 }
@@ -1283,47 +1295,6 @@ h1 {
 .training-flow-arrow svg {
   width: 28px;
   height: 16px;
-}
-
-.training-dots {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  margin-top: 16px;
-}
-
-.training-dot {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-}
-
-.training-dot::before {
-  content: "";
-  width: 12px;
-  height: 12px;
-  border-radius: 999px;
-  background: #cfdbe8;
-  transition:
-    background 180ms ease,
-    width 180ms ease;
-}
-
-.training-dot:hover,
-.training-dot:focus-visible {
-  outline: 3px solid rgba(232, 93, 140, 0.24);
-  outline-offset: 4px;
-}
-
-.training-dot.is-active::before {
-  width: 28px;
-  background: var(--button-primary);
 }
 
 .training-outcome-list {
@@ -1879,20 +1850,6 @@ h1 {
     flex-direction: column;
   }
 
-  .sdg-grid {
-    grid-auto-columns: minmax(220px, 42vw);
-    grid-auto-flow: column;
-    grid-template-columns: none;
-    overflow-x: auto;
-    padding: 2px 2px 16px;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
-  }
-
-  .sdg-item {
-    scroll-snap-align: start;
-  }
-
   .volunteer-columns {
     grid-template-columns: 1fr;
   }
@@ -2059,16 +2016,11 @@ h1 {
   }
 
   .risk-carousel {
-    display: grid;
-    grid-template-columns: 40px minmax(0, 1fr) 40px;
-    align-items: center;
-    gap: 6px;
+    display: block;
   }
 
   .risk-carousel-arrow {
-    display: inline-flex;
-    width: 40px;
-    height: 40px;
+    display: none;
   }
 
   .risk-grid {
@@ -2085,9 +2037,22 @@ h1 {
   }
 
   .sdg-grid {
-    grid-auto-columns: minmax(240px, 82vw);
+    display: block;
     gap: 14px;
-    margin-inline: -2px;
+    margin-inline: 0;
+  }
+
+  .sdg-item {
+    max-width: min(100%, 520px);
+    margin-inline: auto;
+  }
+
+  .sdg-item[hidden] {
+    display: none;
+  }
+
+  .sdg-dots {
+    display: flex;
   }
 
   .risk-step {

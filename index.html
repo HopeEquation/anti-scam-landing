@@ -738,6 +738,9 @@
         }
 
         function renderRiskSlides() {
+          riskPreviousButton.hidden = riskCarouselMedia.matches;
+          riskNextButton.hidden = riskCarouselMedia.matches;
+
           riskSlides.forEach((slide, index) => {
             const isActive = !riskCarouselMedia.matches || index === activeRiskIndex;
             slide.hidden = riskCarouselMedia.matches && !isActive;
