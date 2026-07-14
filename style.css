@@ -1049,8 +1049,8 @@ h1 {
     opacity: 0;              /* 預設全部透明 */
     visibility: hidden;      /* 確保透明時不能被點擊，不影響閱讀 */
     transition: 
-      opacity 0.6s ease-in-out, /* 用 0.6 秒滑順地改變透明度 */
-      visibility 0.6s ease-in-out; 
+      opacity 0.5s ease-in-out, /* 用 0.6 秒滑順地改變透明度 */
+      visibility 0.5s ease-in-out; 
   }
 
   /* 忽略原本的 [hidden]，我們改用更精細的 CSS 控制 */
