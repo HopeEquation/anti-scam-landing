@@ -2321,7 +2321,7 @@ h1 {
   display: none; /* 僅針對電腦版隱藏，移除 <> 符號 */
 }
 /* ==========================================================================
-   ✨ AI 防詐小幫手 RWD 雙層複合式頭部 - 終極修正版 (解決消失與未貼頂問題)
+   ✨ AI 防詐小幫手 RWD 雙層複合式頭部 - 終極修正與手機互動效果版
    ========================================================================== */
 
 /* 一、全站通用與電腦版優化 */
@@ -2334,16 +2334,16 @@ h1 {
   object-position: left center;
 }
 
-/* 2. 電腦版 Header 預設為 sticky (已佔用排版空間)，因此 body 不需要 padding-top，避免出現空白縫隙 */
+/* 2. 電腦版 Header 預設為 sticky (已佔用排版空間)，因此 body 不需要 padding-top */
 body {
   padding-top: 0 !important;
 }
 
 
-/* 二、手機版響應式設定：雙層複合式隱藏 (螢幕寬度小於 680px) */
+/* 二、手機版響應式設定：雙層複合式隱藏與按鈕互動 (螢幕寬度小於 680px) */
 @media (max-width: 680px) {
   
-  /* 1. 解決覆蓋問題：設定與手機版複合式 Header 相同高度的上邊距 (Logo層 60px + 按鈕層 40px = 100px) */
+  /* 1. 解決覆蓋問題：設定與手機版複合式 Header 相同高度的上邊距 */
   body {
     padding-top: 100px !important; 
   }
@@ -2354,20 +2354,20 @@ body {
     top: 0 !important;
     left: 0 !important;
     width: 100% !important;
-    height: 100px !important; /* 👈 雙層總高度 */
-    z-index: 99 !important;   /* 👈 提高層級，確保不被網頁其他元件遮擋 */
+    height: 100px !important;
+    z-index: 99 !important;
     display: flex !important;
     flex-direction: column !important;
-    background: rgba(255, 255, 255, 0.98) !important; /* 稍微提高不透明度，防止底層文字透光 */
+    background: rgba(255, 255, 255, 0.98) !important;
     backdrop-filter: blur(18px) saturate(160%) !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
     overflow: hidden !important;
-    transition: top 0.3s ease-in-out !important; /* 👈 監聽 top 屬性的平滑過渡 */
-    transform: none !important; /* 👈 絕對關鍵：清除所有舊有的 transform 衝突 */
-    opacity: 1 !important;      /* 👈 絕對關鍵：確保任何時候都是不透明的可見狀態 */
+    transition: top 0.3s ease-in-out !important;
+    transform: none !important;
+    opacity: 1 !important;
   }
 
-  /* 3. 重設手機版內部導覽結構，去除原本會撐開高度的內距、外距與 gap */
+  /* 3. 重設手機版內部導覽結構 */
   .nav {
     display: flex !important;
     flex-direction: column !important;
@@ -2379,7 +2379,7 @@ body {
     margin: 0 !important;
   }
 
-  /* A. Logo 層：高度固定 60px，提供 Logo 更寬裕的放大空間 */
+  /* A. Logo 層：高度固定 60px */
   .brand {
     display: flex !important;
     align-items: center !important;
@@ -2393,14 +2393,14 @@ body {
     visibility: visible !important;
   }
 
-  /* 📱 手機版 Logo 圖片放大：字體和小桃隊長精緻熊頭更清晰！ */
+  /* 手機版 Logo 圖片 */
   .brand-logo {
     height: 46px !important; 
     width: auto !important;
     max-width: 80% !important;
   }
 
-  /* B. 按鈕層：高度固定 40px */
+  /* B. 按鈕層：高度固定 40px，在下方完美併排 */
   .nav-links {
     display: flex !important;
     flex-direction: row !important;
@@ -2410,16 +2410,17 @@ body {
     height: 40px !important;
     padding: 0 8px !important;
     margin: 0 !important;
-    overflow-x: auto !important; /* 確保按鈕過多時可橫向滑動 */
+    overflow-x: auto !important;
     scrollbar-width: none !important;
     border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
-    background: rgba(255, 255, 255, 0.98) !important; /* 確保 Logo 隱藏後，按鈕層底色不透光 */
+    background: rgba(255, 255, 255, 0.98) !important;
   }
 
   .nav-links::-webkit-scrollbar {
     display: none !important;
   }
 
+  /* 📱 手機版四個按鈕基礎樣式：加入互動過渡時間 */
   .nav-links a {
     flex: 1 0 auto !important;
     min-height: auto !important;
@@ -2429,23 +2430,51 @@ body {
     text-align: center !important;
     color: #344054 !important;
     background: transparent !important;
-    border-radius: 0 !important;
+    border-radius: 6px !important; /* 👈 改為小圓角膠囊，方便顯現互動背景 */
+    transition: 
+      background-color 150ms ease, 
+      color 150ms ease, 
+      transform 100ms ease-out !important; /* 👈 增加點擊反饋時間 */
   }
 
-  /* 合作邀約 (CTA) 按鈕在手機版微調 */
+  /* 📱 互動效果一：一般按鈕（關於我們、常見案例、講師招募）點擊與按壓反饋 */
+  .nav-links a:not(.nav-cta):active {
+    background-color: rgba(232, 93, 140, 0.1) !important; /* 👈 按壓時亮起溫暖粉紅背景 */
+    color: var(--primary) !important;                    /* 👈 字體變為桃紅色 */
+    transform: scale(0.95) !important;                     /* 👈 按壓時微下陷，產生點擊反饋 */
+  }
+
+  /* 在桌機模擬手機版瀏覽時的 Hover 狀態 */
+  .nav-links a:not(.nav-cta):hover {
+    color: var(--primary) !important;
+  }
+
+  /* 📱 互動效果二：合作邀約 (CTA) 右側亮粉紅按鈕 */
   .nav-links .nav-cta {
     margin-left: 4px !important;
     padding: 6px 12px !important;
     background: var(--button-primary) !important;
     color: #fff !important;
     border-radius: var(--radius) !important;
+    box-shadow: 0 4px 10px rgba(232, 93, 140, 0.15) !important;
   }
 
-  /* 4. 滾動隱藏：向上滑動時，直接將整個 Header 往上推 60px */
-  /* 這裡加上了強制不透明 (opacity: 1) 與取消位移 (transform: none) */
+  /* 合作邀約按鈕按壓反饋 */
+  .nav-links .nav-cta:active {
+    background-color: var(--button-primary-dark) !important; /* 👈 按壓時桃紅加深 */
+    transform: scale(0.93) !important;                        /* 👈 下陷反饋比一般按鈕更明顯 */
+    box-shadow: 0 2px 4px rgba(232, 93, 140, 0.1) !important;
+    color: #fff !important;
+  }
+
+  .nav-links .nav-cta:hover {
+    color: #fff !important;
+  }
+
+  /* 4. 滾動隱藏 */
   .site-header.header-hidden {
     top: -60px !important; 
-    opacity: 1 !important;     /* 👈 完美破解：強制覆蓋舊代碼的 opacity: 0 */
-    transform: none !important; /* 👈 完美破解：強制覆蓋舊代碼的 transform: translateY(-100%) */
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
