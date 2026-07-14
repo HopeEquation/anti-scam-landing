@@ -2086,24 +2086,29 @@ h1 {
     display: flex;
   }
 
-  .sdg-grid {
-    display: block;
-    gap: 14px;
-    margin-inline: 0;
-  }
-
-  .sdg-item {
-    max-width: min(100%, 520px);
-    margin-inline: auto;
-  }
-
-  .sdg-item[hidden] {
-    display: none;
-  }
-
-  .sdg-dots {
-    display: flex;
-  }
+   
+    .sdg-grid {
+      display: grid;              /* 從 block 改回 grid，讓 gap 屬性生效 */
+      grid-template-columns: 1fr; /* 手機版單欄垂直排列，一張一張往下排 */
+      gap: 20px;                  /* 卡片與卡片之間的上下間距 */
+      margin-inline: 0;
+    }
+    
+    .sdg-item {
+      width: 100%;
+      max-width: min(100%, 520px);
+      margin-inline: auto;
+    }
+    
+    /* 強制顯示原本被 JS 或是 HTML hidden 屬性隱藏的輪播項目 */
+    .sdg-item[hidden] {
+      display: grid !important;   /* 確保所有項目同時展開顯示 */
+    }
+    
+    /* 隱藏手機版原本的輪播切換圓點 */
+    .sdg-dots {
+      display: none !important;   /* 展開排列後不再需要導覽圓點，直接隱藏 */
+    }
 
   .risk-step {
     grid-template-columns: 40px 1fr;
