@@ -1657,9 +1657,13 @@ h1 {
 
 .footer-inner a:hover,
 .footer-inner a:focus-visible {
-  background: #1e40af;        /* 滑鼠移上去時，變為稍微亮一點的藍色，提升點擊感 */
-  color: #ffffff;             /* 保持白色字體 */
-  transform: translateY(-1px); /* 微幅向上飄浮，增加現代感 */
+  /* 🎯 修正：改用品牌定義的桃紅色 (var(--primary) 即 #e85d8c) */
+  background: var(--primary) !important; 
+  color: #ffffff !important;
+  
+  /* 加上柔和的粉色發光陰影與微幅上飄 */
+  box-shadow: 0 6px 14px rgba(232, 93, 140, 0.25) !important;
+  transform: translateY(-2px) !important;
   outline: none;
 }
 
