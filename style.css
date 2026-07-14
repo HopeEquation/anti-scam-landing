@@ -989,14 +989,31 @@ h1 {
   color: var(--muted);
 }
 
-/* 網頁版：依然保持原本精美的五欄網格排列，不輪播 */
-.risk-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
+/* ==========================================================================
+   ✨ 五種風險等級圖例 - 電腦版與手機版完美 RWD 排版 (修復跑版與大括號衝突)
+   ========================================================================== */
+
+/* ── 一、電腦版全域樣式 (預設 5 欄網格並排) ── */
+
+.risk-carousel {
+  display: block;
+  margin-top: 22px;
 }
 
+/* 電腦版：強制保持精美的 5 欄 Grid 並排 */
+.risk-grid {
+  display: grid !important; 
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  position: static !important; /* 清除手機版相對定位 */
+  height: auto !important;
+}
+
+/* 電腦版卡片：基礎設定 (清除手機版絕對定位) */
 .risk-card {
+  position: static !important; 
+  opacity: 1 !important;        /* 確保電腦版完全不透明 */
+  visibility: visible !important; /* 確保電腦版完全可見 */
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -1010,104 +1027,70 @@ h1 {
   object-fit: cover;
 }
 
+/* 電腦版字體：14px，置中對齊 */
 .risk-card span {
-  display: block;
-  padding: 12px;
-  font-size: 14px;
-  font-weight: 800;
-  text-align: center; 
+  display: block !important;
+  padding: 12px !important;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  text-align: center !important;
 }
 
 
-/* 手機版響應式設定：切換為淡入淡出輪播模式 */
+/* ── 二、手機版響應式設定 (螢幕寬度小於 680px 專屬，完美鎖在括號內) ── */
 @media (max-width: 680px) {
-  /* ✨ 請將這一段加在手機版 Media Query 內 👇 */
-  .site-header {
-    /* 1. 核心修正：將 position 改為固定，方便過渡動畫控制 */
-    position: fixed; 
-    width: 100%;
-    
-    /* 2. 核心設定：加上平滑的過渡動畫，時間設為 0.3 秒，增加流暢度 */
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; 
-    
-    /* 確保初始狀態是顯示的 */
-    transform: translateY(0);
-    opacity: 1;
-    z-index: 30; /* 確保自己還在網頁內容上方 */
-  }
 
-  /* 當 JavaScript 加入 .header-hidden 時，執行隱藏動畫 */
-  .site-header.header-hidden {
-    /* 👈 將自己滑出螢幕頂部，移動距離大約是頭部的高度 */
-    transform: translateY(-100%); 
-    opacity: 0;                   /* 變為透明 */
-  }
-}
   .risk-carousel {
-    display: block;
-    margin-top: 22px;
-    position: relative; /* 讓子元素可以絕對定位在同一個點 */
+    position: relative !important; /* 讓子元素可以絕對定位在同一個點 */
   }
 
   .risk-carousel-viewport {
-    min-width: 0;
+    min-width: 0 !important;
   }
 
+  /* 手機版：取消 Grid 排列，改為相對定位容器，準備進行淡入淡出 */
   .risk-grid {
-    display: block; /* 在手機版取消 grid 排列 */
-    position: relative;
-    height: auto;
-    min-height: calc(100vw * 3 / 4 + 48px); /* 確保 viewport 高度不塌陷 */
+    display: block !important; 
+    position: relative !important;
+    height: auto !important;
+    min-height: calc(100vw * 3 / 4 + 48px) !important; /* 確保高度不塌陷 */
   }
 
+  /* 手機版卡片：變成絕對定位以達成淡入淡出（Cross-Fade）*/
   .risk-slide {
-    position: absolute; /* 強制所有圖片貼在同一個位置 */
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    max-width: none;
-    background: #fff;
+    position: absolute !important; /* 強制所有圖片疊在同一個位置 */
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    max-width: none !important;
+    background: #fff !important;
+    
     /* 核心滑順機制 */
-    opacity: 0;              /* 預設全部透明 */
-    visibility: hidden;      /* 確保透明時不能被點擊，不影響閱讀 */
+    opacity: 0 !important;             /* 預設全部透明 */
+    visibility: hidden !important;     /* 確保透明時不能被點擊 */
     transition: 
-      opacity 0.5s ease-in-out, /* 用 0.6 秒滑順地改變透明度 */
-      visibility 0.5s ease-in-out; 
+      opacity 0.5s ease-in-out, 
+      visibility 0.5s ease-in-out !important;
   }
 
-  /* 忽略原本的 [hidden]，我們改用更精細的 CSS 控制 */
+  /* 忽略原本的 [hidden]，改用更精細的 CSS 控制 */
   .risk-slide[hidden] {
-    display: block; /* 確保圖片還在，能被我們控制 opacity */
+    display: block !important; /* 確保圖片還在，能被我們控制 opacity */
   }
 
   /* 當圖片被加入 .is-active 時，執行淡入顯示 */
   .risk-slide.is-active {
-    opacity: 1;              /* 變為不透明 */
-    visibility: visible;      /* 變為可見並可互動 */
-    z-index: 2;               /* 確保自己在最上層 */
+    opacity: 1 !important;             /* 變為不透明 */
+    visibility: visible !important;     /* 變為可見並可互動 */
+    z-index: 2 !important;              /* 確保自己在最上層 */
   }
-}
 
-.risk-card {
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: #fff;
-  box-shadow: 0 10px 22px rgba(22, 34, 51, 0.06);
-}
-
-.risk-card img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-}
-
-.risk-card span {
-  display: block;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: 800;
+  /* 手機版字體加大為 16px，更好讀 */
+  .risk-card span {
+    font-size: 16px !important;
+    padding: 14px 12px !important;
+  }
 }
 
 .risk-dots,
