@@ -163,28 +163,24 @@
               </article>
               <!-- 🎬 新插入的「FB 直式 Reels 影片卡片」 -->
               <article class="about-card video-card-trigger" data-video="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1704471910587270%2F&show_text=false&width=267&t=0">
-                
-                <!-- 上半部：封面圖與精緻播放按鈕 (高度完美對齊 230px) -->
-                <div class="video-thumbnail-wrapper">
-                  <!-- ⚠️ 請將 src 替換為您的影片封面截圖路徑 -->
-                  <img src="img/關於我們/智匯桃園.jpg" alt="反詐騙及兒少性剝削預防犯罪宣導影片封面" loading="lazy" />
-                  
-                  <!-- 懸浮播放按鈕圖示 -->
-                  <div class="video-play-overlay">
-                    <div class="play-icon">
-                      <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
+  
+              <div class="video-thumbnail-wrapper">
+                <!-- 這裡可以放您想當作封面的圖片路徑 -->
+                <img src="img/關於我們/智匯桃園.jpg" alt="宣導影片封面" />
+                <div class="video-play-overlay">
+                  <div class="play-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
                   </div>
                 </div>
-              
-                <!-- 下半部：白色文字區 (與其他卡片完全對齊) -->
-                <div class="about-card-body">
-                  <h3>公私協力宣導影片合作</h3>
-                  <p>參與警察局拍攝反詐騙及兒少性剝削預防犯罪宣導影片</p>
-                </div>
-              </article>
+              </div>
+            
+              <div class="about-card-body">
+                <h3>公私協力宣導影片合作</h3>
+                <p>參與警察局拍攝反詐騙及兒少性剝削預防犯罪宣導影片</p>
+              </div>
+            </article>
             </div>
           </div>
         </div>
@@ -952,20 +948,31 @@ window.addEventListener('scroll', () => {
 });
     </script>
     // ==========================================================================
-// 🎬 關於我們 - FB Reels 影片高質感彈跳播放器 (自動建立與完美音量阻斷)
+// 🎬 關於我們 - FB Reels 影片 100% 觸發與強制自動播放偵測器
 // ==========================================================================
-document.addEventListener('DOMContentLoaded', () => {
-  const videoTrigger = document.querySelector('.video-card-trigger');
-  
-  if (videoTrigger) {
+(function() {
+  const initVideoPopup = () => {
+    const videoTrigger = document.querySelector('.video-card-trigger');
+    
+    // 安全防護：如果畫面上找不到這個影片卡片，直接結束不報錯
+    if (!videoTrigger) return;
+    
     videoTrigger.addEventListener('click', (e) => {
+      // 1. 阻止 a 標籤預設的跳轉行為
       e.preventDefault();
+      e.stopPropagation();
       
-      // 1. 取得卡片上綁定的 FB 影片 url
-      const videoUrl = videoTrigger.getAttribute('data-video');
+      // 2. 取得卡片上綁定的 FB 影片網址
+      let videoUrl = videoTrigger.getAttribute('data-video');
       if (!videoUrl) return;
 
-      // 2. 動態在 Body 底部產生一個高質感的電影院遮罩與播放面板
+      // 3. 🎯 核心修正：強制在網址後方追加 autoplay=true，確保開窗即播放！
+      if (!videoUrl.includes('autoplay=')) {
+        // 如果網址已有其他參數，用 & 連接；否則用 ? 連接
+        videoUrl += (videoUrl.includes('?') ? '&' : '?') + 'autoplay=true';
+      }
+
+      // 4. 動態在網頁最底層產生電影院級遮罩與播放面板
       const popupContainer = document.createElement('div');
       popupContainer.className = 'video-popup-container';
       
@@ -984,26 +991,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
       document.body.appendChild(popupContainer);
       
-      // 3. 強制讓 Body 不能滾動，防止彈出視窗時背景還在滑
+      // 5. 鎖定背景網頁：避免使用者在看影片時，背景還能被滾動
       document.body.style.overflow = 'hidden';
 
-      // 4. 動效延遲：觸發 CSS 淡入與回彈效果
+      // 6. 微幅延遲觸發，讓 CSS 的 Fade-in (淡入) 與彈性放大動畫流暢展現
       setTimeout(() => {
         popupContainer.classList.add('is-active');
-      }, 30);
+      }, 50);
 
-      // 5. 關閉邏輯：定義一個專屬的關閉函式
+      // 7. 完美關閉函式：徹底銷毀 iframe，防止背景繼續發出聲音
       const closePopup = () => {
         popupContainer.classList.remove('is-active');
         document.body.style.overflow = ''; // 恢復網頁滾動
         
-        // 等淡出動畫（0.3秒）播放完畢後，徹底將彈窗從 HTML 中刪除（銷毀 iframe 阻斷聲音）
+        // 等待淡出動畫完畢（0.3秒）再從 HTML 中徹底拔除
         setTimeout(() => {
           popupContainer.remove();
         }, 300);
       };
 
-      // 點擊叉叉關閉
+      // 點擊叉叉按鈕關閉
       popupContainer.querySelector('.video-popup-close').addEventListener('click', (e) => {
         e.stopPropagation();
         closePopup();
@@ -1016,7 +1023,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     });
+  };
+
+  // 🎯 核心修正：ReadyState (網頁加載狀態) 雙重保險防禦機制
+  // 如果網頁早就載入好了，不等待 DOMContentLoaded，立刻執行初始化！
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVideoPopup);
+  } else {
+    initVideoPopup();
   }
-});
+})();
   </body>
 </html>
