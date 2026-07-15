@@ -2587,39 +2587,56 @@ body {
 }
 
 /* ==========================================================================
-   🎬 關於我們 - FB Reels 影片卡片 RWD 響應式與置中防破版樣式
+   🎬 關於我們 - FB Reels 影片卡片 (白底一致性與文字對齊優化)
    ========================================================================== */
 
-/* 1. 影片卡片外框：採用高質感深邃黑背景，營造如精緻播放器般的視覺 */
+/* 1. 影片卡片外框：改回純白背景，與隔壁卡片完美同調 */
 .about-card.video-card {
-  background: #FFFFFF !important; /* 👈 高質感墨黑色背景，消除直式影片兩側的突兀感 */
-  border: 1px solid rgba(255, 255, 255, 0.1) !important; /* 細微的邊框界線 */
+  background: #ffffff !important;
+  border: 1px solid var(--line) !important;
   display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
+  flex-direction: column !important; /* 👈 改為上下垂直排列：上影片、下文字 */
+  justify-content: flex-start !important;
+  align-items: stretch !important;
   padding: 0 !important;
   overflow: hidden !important;
-  min-height: 450px !important; /* 👈 確保高度與其他文字卡片分毫不差、完美對齊 */
+  min-height: 450px !important; /* 與其餘卡片高度完全對齊 */
 }
 
-/* 2. 影片包裝器：滿版撐開並居中 */
+/* 2. 上半部影片區：高度精準鎖定 230px (與隔壁卡片的圖片高度 230px 分毫不差) */
 .about-card.video-card .video-wrapper {
   width: 100% !important;
-  height: 100% !important;
+  height: 230px !important; /* 👈 關鍵：對齊隔壁圖片高度 */
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  padding: 12px !important; /* 四週預留 12px 呼吸邊界，畫面看起來更高級 */
+  padding: 10px 0 !important;
+  background: #f8fafc !important; /* 採用極輕透的灰白底色，收納直式影片，視覺極具層次 */
+  border-bottom: 1px solid var(--line) !important; /* 👈 水平分割線，與隔壁卡片的圖片底線連成一氣 */
 }
 
-/* 3. 強制讓 FB 影片 Iframe 支援 RWD 自適應縮放 */
+/* 3. FB 影片播放器 RWD 縮放：在 230px 高度內以 9:16 黃金比例居中顯示 */
 .about-card.video-card iframe {
-  width: 100% !important;
   height: 100% !important;
-  max-width: 267px !important;  /* 👈 嚴格鎖定 FB 影片預設的最佳寬度 */
-  max-height: 476px !important; /* 👈 嚴格鎖定 FB 影片預設的最佳高度 */
-  aspect-ratio: 267 / 476 !important; /* 👈 強制維持 9:16 Reels 黃金比例，絕不擠壓變形 */
+  max-height: 210px !important; /* 預留上下 10px 的安全呼吸間距 */
+  width: auto !important;
+  aspect-ratio: 267 / 476 !important; /* 強制維持直式 Reels 比例，絕不擠壓 */
   border: none !important;
-  border-radius: 6px !important; /* 給影片播放器邊框一點點圓角 */
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important; /* 加上陰影使其更立體 */
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important; /* 柔和陰影 */
+}
+
+/* 4. 下半部文字區：直接套用原有的 .about-card-body 樣式，完美繼承標題與內文排版 */
+.about-card.video-card .about-card-body {
+  display: flex !important;
+  flex: 1 !important;
+  flex-direction: column !important;
+  background: #ffffff !important;
+}
+
+/* 手機版（小於 680px）同步微調 */
+@media (max-width: 680px) {
+  .about-card.video-card {
+    min-height: 430px !important; /* 與手機版卡片高度一致 */
+  }
 }
