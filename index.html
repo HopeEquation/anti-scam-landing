@@ -181,8 +181,8 @@
               
                 <!-- 下半部：白色文字區 (與其他卡片完全對齊) -->
                 <div class="about-card-body">
-                  <h3>公私協力宣導合作</h3>
-                  <p>希望方程式參與警察局拍攝反詐騙及兒少性剝削預防犯罪宣導影片</p>
+                  <h3>公私協力宣導影片合作</h3>
+                  <p>參與警察局拍攝反詐騙及兒少性剝削預防犯罪宣導影片</p>
                 </div>
               </article>
             </div>
@@ -951,5 +951,72 @@ window.addEventListener('scroll', () => {
   lastScrollY = currentScrollY;
 });
     </script>
+    // ==========================================================================
+// 🎬 關於我們 - FB Reels 影片高質感彈跳播放器 (自動建立與完美音量阻斷)
+// ==========================================================================
+document.addEventListener('DOMContentLoaded', () => {
+  const videoTrigger = document.querySelector('.video-card-trigger');
+  
+  if (videoTrigger) {
+    videoTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      
+      // 1. 取得卡片上綁定的 FB 影片 url
+      const videoUrl = videoTrigger.getAttribute('data-video');
+      if (!videoUrl) return;
+
+      // 2. 動態在 Body 底部產生一個高質感的電影院遮罩與播放面板
+      const popupContainer = document.createElement('div');
+      popupContainer.className = 'video-popup-container';
+      
+      popupContainer.innerHTML = `
+        <div class="video-popup-panel">
+          <button class="video-popup-close" aria-label="關閉影片">&times;</button>
+          <iframe 
+            src="${videoUrl}" 
+            scrolling="no" 
+            frameborder="0" 
+            allowfullscreen="true" 
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+          </iframe>
+        </div>
+      `;
+
+      document.body.appendChild(popupContainer);
+      
+      // 3. 強制讓 Body 不能滾動，防止彈出視窗時背景還在滑
+      document.body.style.overflow = 'hidden';
+
+      // 4. 動效延遲：觸發 CSS 淡入與回彈效果
+      setTimeout(() => {
+        popupContainer.classList.add('is-active');
+      }, 30);
+
+      // 5. 關閉邏輯：定義一個專屬的關閉函式
+      const closePopup = () => {
+        popupContainer.classList.remove('is-active');
+        document.body.style.overflow = ''; // 恢復網頁滾動
+        
+        // 等淡出動畫（0.3秒）播放完畢後，徹底將彈窗從 HTML 中刪除（銷毀 iframe 阻斷聲音）
+        setTimeout(() => {
+          popupContainer.remove();
+        }, 300);
+      };
+
+      // 點擊叉叉關閉
+      popupContainer.querySelector('.video-popup-close').addEventListener('click', (e) => {
+        e.stopPropagation();
+        closePopup();
+      });
+
+      // 點擊黑色半透明背景空白處也能優雅關閉
+      popupContainer.addEventListener('click', (e) => {
+        if (e.target === popupContainer) {
+          closePopup();
+        }
+      });
+    });
+  }
+});
   </body>
 </html>
