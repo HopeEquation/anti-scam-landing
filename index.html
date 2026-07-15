@@ -946,6 +946,86 @@ window.addEventListener('scroll', () => {
   // 4. 更新上一次的滾動位置
   lastScrollY = currentScrollY;
 });
+
+      // ==========================================================================
+// 🎬 關於我們 - FB Reels 影片 100% 觸發與強制自動播放偵測器 (修復版)
+// ==========================================================================
+(function() {
+  const initVideoPopup = () => {
+    const videoTrigger = document.querySelector('.video-card-trigger');
+    
+    // 安全防護：如果畫面上找不到這個影片卡片，直接結束不報錯
+    if (!videoTrigger) return;
+    
+    videoTrigger.addEventListener('click', (e) => {
+      // 阻止 A 標籤預設行為，防止頁面跳轉
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // 1. 取得卡片上綁定的 FB 影片網址
+      let videoUrl = videoTrigger.getAttribute('data-video');
+      if (!videoUrl) return;
+
+      // 2. 核心修正：強制在網址後方追加 autoplay=true，確保開窗即播放！
+      if (!videoUrl.includes('autoplay=')) {
+        videoUrl += (videoUrl.includes('?') ? '&' : '?') + 'autoplay=true';
+      }
+
+      // 3. 動態在網頁最底層產生電影院級遮罩與播放面板
+      const popupContainer = document.createElement('div');
+      popupContainer.className = 'video-popup-container';
+      
+      popupContainer.innerHTML = `
+        
+          ×
+          
+          
+        
+      `;
+
+      document.body.appendChild(popupContainer);
+      
+      // 4. 鎖定背景網頁：避免使用者在看影片時，背景還能被滾動
+      document.body.style.overflow = 'hidden';
+
+      // 5. 微幅延遲觸發，讓 CSS 的 Fade-in 彈性放大動畫流暢展現
+      setTimeout(() => {
+        popupContainer.classList.add('is-active');
+      }, 50);
+
+      // 6. 完美關閉函式：徹底銷毀 iframe，防止背景繼續發出聲音
+      const closePopup = () => {
+        popupContainer.classList.remove('is-active');
+        document.body.style.overflow = ''; // 恢復網頁滾動
+        
+        // 等待淡出動畫完畢（0.3秒）再從 HTML 中徹底拔除
+        setTimeout(() => {
+          popupContainer.remove();
+        }, 300);
+      };
+
+      // 點擊叉叉按鈕關閉
+      popupContainer.querySelector('.video-popup-close').addEventListener('click', (e) => {
+        e.stopPropagation();
+        closePopup();
+      });
+
+      // 點擊黑色半透明背景空白處也能優雅關閉
+      popupContainer.addEventListener('click', (e) => {
+        if (e.target === popupContainer) {
+          closePopup();
+        }
+      });
+    });
+  };
+
+  // ReadyState 雙重保險防禦機制：確保在 DOMContentLoaded 載入完成後完美綁定
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVideoPopup);
+  } else {
+    initVideoPopup();
+  }
+})();
     </script>
   </body>
 </html>
