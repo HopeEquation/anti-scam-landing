@@ -576,6 +576,22 @@
       const nextButton = document.querySelector('[data-carousel="next"]');
 
       if (track && previousButton && nextButton) {
+        // 🎯 請在這裡「插入」以下隨機排序程式碼 👇
+        // -------------------------------------------------------------
+        const initialCards = Array.from(track.querySelectorAll(".about-card"));
+        
+        // 使用 Fisher-Yates 經典洗牌演算法，確保每一張卡片出現的機率絕對隨機平等
+        for (let i = initialCards.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          // 陣列元素交換位置
+          const temp = initialCards[i];
+          initialCards[i] = initialCards[j];
+          initialCards[j] = temp;
+        }
+        
+        // 將洗牌後全新順序的卡片，重新依序附加回 HTML 軌道中
+        initialCards.forEach(card => track.appendChild(card));
+        // -------------------------------------------------------------
         const cards = Array.from(track.querySelectorAll(".about-card"));
         const carouselStage = track.closest(".carousel-stage");
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
