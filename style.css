@@ -2592,7 +2592,7 @@ body {
 
 /* 1. 影片卡片外框：採用高質感深邃黑背景，營造如精緻播放器般的視覺 */
 .about-card.video-card {
-  background: #090d13 !important; /* 👈 高質感墨黑色背景，消除直式影片兩側的突兀感 */
+  background: #FFFFFF !important; /* 👈 高質感墨黑色背景，消除直式影片兩側的突兀感 */
   border: 1px solid rgba(255, 255, 255, 0.1) !important; /* 細微的邊框界線 */
   display: flex !important;
   justify-content: center !important;
