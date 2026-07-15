@@ -2257,7 +2257,7 @@ h1 {
     right: max(14px, env(safe-area-inset-right));
     bottom: max(30px, env(safe-area-inset-bottom));
   }
-}
+
 
 @media (max-width: 420px) {
   .statement-panel-head,
