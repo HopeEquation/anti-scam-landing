@@ -2585,3 +2585,41 @@ body {
     line-height: 1.4 !important;
   }
 }
+
+/* ==========================================================================
+   🎬 關於我們 - FB Reels 影片卡片 RWD 響應式與置中防破版樣式
+   ========================================================================== */
+
+/* 1. 影片卡片外框：採用高質感深邃黑背景，營造如精緻播放器般的視覺 */
+.about-card.video-card {
+  background: #090d13 !important; /* 👈 高質感墨黑色背景，消除直式影片兩側的突兀感 */
+  border: 1px solid rgba(255, 255, 255, 0.1) !important; /* 細微的邊框界線 */
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  min-height: 450px !important; /* 👈 確保高度與其他文字卡片分毫不差、完美對齊 */
+}
+
+/* 2. 影片包裝器：滿版撐開並居中 */
+.about-card.video-card .video-wrapper {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 12px !important; /* 四週預留 12px 呼吸邊界，畫面看起來更高級 */
+}
+
+/* 3. 強制讓 FB 影片 Iframe 支援 RWD 自適應縮放 */
+.about-card.video-card iframe {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 267px !important;  /* 👈 嚴格鎖定 FB 影片預設的最佳寬度 */
+  max-height: 476px !important; /* 👈 嚴格鎖定 FB 影片預設的最佳高度 */
+  aspect-ratio: 267 / 476 !important; /* 👈 強制維持 9:16 Reels 黃金比例，絕不擠壓變形 */
+  border: none !important;
+  border-radius: 6px !important; /* 給影片播放器邊框一點點圓角 */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important; /* 加上陰影使其更立體 */
+}
