@@ -947,8 +947,8 @@ window.addEventListener('scroll', () => {
   lastScrollY = currentScrollY;
 });
 
-      // ==========================================================================
-// 🎬 關於我們 - FB Reels 影片 100% 觸發與強制自動播放偵測器 (修復版)
+// ==========================================================================
+// 🎬 關於我們 - FB Reels 影片 100% 觸發與強制自動播放偵測器 (終極完整修復版)
 // ==========================================================================
 (function() {
   const initVideoPopup = () => {
@@ -966,21 +966,26 @@ window.addEventListener('scroll', () => {
       let videoUrl = videoTrigger.getAttribute('data-video');
       if (!videoUrl) return;
 
-      // 2. 核心修正：強制在網址後方追加 autoplay=true，確保開窗即播放！
+      // 2. 強制在網址後方追加 autoplay=true，確保開窗即自動播放
       if (!videoUrl.includes('autoplay=')) {
         videoUrl += (videoUrl.includes('?') ? '&' : '?') + 'autoplay=true';
       }
 
-      // 3. 動態在網頁最底層產生電影院級遮罩與播放面板
+      // 3. 🎯 核心修復：補回先前不小心遺失的滿版 HTML 彈窗結構
       const popupContainer = document.createElement('div');
       popupContainer.className = 'video-popup-container';
       
       popupContainer.innerHTML = `
-        
-          ×
-          
-          
-        
+        <div class="video-popup-panel">
+          <button class="video-popup-close" aria-label="關閉影片">&times;</button>
+          <iframe 
+            src="${videoUrl}" 
+            scrolling="no" 
+            frameborder="0" 
+            allowfullscreen="true" 
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+          </iframe>
+        </div>
       `;
 
       document.body.appendChild(popupContainer);
