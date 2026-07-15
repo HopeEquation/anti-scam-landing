@@ -2587,56 +2587,143 @@ body {
 }
 
 /* ==========================================================================
-   🎬 關於我們 - FB Reels 影片卡片 (白底一致性與文字對齊優化)
+   🎬 關於我們 - FB Reels 影片封面卡片與電影院彈跳視窗 (Video Lightbox)
    ========================================================================== */
 
-/* 1. 影片卡片外框：改回純白背景，與隔壁卡片完美同調 */
-.about-card.video-card {
-  background: #ffffff !important;
-  border: 1px solid var(--line) !important;
-  display: flex !important;
-  flex-direction: column !important; /* 👈 改為上下垂直排列：上影片、下文字 */
-  justify-content: flex-start !important;
-  align-items: stretch !important;
-  padding: 0 !important;
-  overflow: hidden !important;
-  min-height: 450px !important; /* 與其餘卡片高度完全對齊 */
+/* 1. 影片卡片外框設定 */
+.about-card.video-card-trigger {
+  cursor: pointer !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-/* 2. 上半部影片區：高度精準鎖定 230px (與隔壁卡片的圖片高度 230px 分毫不差) */
-.about-card.video-card .video-wrapper {
+.about-card.video-card-trigger:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 20px 40px rgba(22, 34, 51, 0.18) !important;
+}
+
+/* 2. 封面圖包裝器：鎖定與一般圖片完全相同的 230px 高度 */
+.video-thumbnail-wrapper {
+  position: relative !important;
   width: 100% !important;
-  height: 230px !important; /* 👈 關鍵：對齊隔壁圖片高度 */
+  height: 230px !important;
+  overflow: hidden !important;
+  background: #000;
+}
+
+.video-thumbnail-wrapper img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  transition: transform 0.3s ease !important;
+}
+
+/* 滑鼠懸停時封面圖微放大 */
+.about-card.video-card-trigger:hover .video-thumbnail-wrapper img {
+  transform: scale(1.05);
+}
+
+/* 3. 播放按鈕懸浮遮罩 */
+.video-play-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  background: rgba(0, 0, 0, 0.35) !important; /* 輕微暗化封面，凸顯播放鍵 */
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  padding: 10px 0 !important;
-  background: #f8fafc !important; /* 採用極輕透的灰白底色，收納直式影片，視覺極具層次 */
-  border-bottom: 1px solid var(--line) !important; /* 👈 水平分割線，與隔壁卡片的圖片底線連成一氣 */
+  transition: background 0.2s ease !important;
 }
 
-/* 3. FB 影片播放器 RWD 縮放：在 230px 高度內以 9:16 黃金比例居中顯示 */
-.about-card.video-card iframe {
-  height: 100% !important;
-  max-height: 210px !important; /* 預留上下 10px 的安全呼吸間距 */
-  width: auto !important;
-  aspect-ratio: 267 / 476 !important; /* 強制維持直式 Reels 比例，絕不擠壓 */
-  border: none !important;
-  border-radius: 6px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12) !important; /* 柔和陰影 */
+.about-card.video-card-trigger:hover .video-play-overlay {
+  background: rgba(0, 0, 0, 0.2) !important; /* 懸停時變亮 */
 }
 
-/* 4. 下半部文字區：直接套用原有的 .about-card-body 樣式，完美繼承標題與內文排版 */
-.about-card.video-card .about-card-body {
+/* 播放圓圈與三角形符號 */
+.play-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--primary); /* 使用漂亮的品牌桃粉色 */
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  box-shadow: 0 8px 20px rgba(232, 93, 140, 0.4);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.play-icon svg {
+  width: 28px;
+  height: 28px;
+  margin-left: 4px; /* 微調三角形居中視覺 */
+}
+
+.about-card.video-card-trigger:hover .play-icon {
+  transform: scale(1.15) !important; /* 懸停時播放鍵微幅彈跳變大 */
+}
+
+/* ── 4. 電影院級影片彈出視窗 (Video Lightbox) ── */
+.video-popup-container {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 99999 !important; /* 確保絕對在最上層，甚至高於導覽列 */
   display: flex !important;
-  flex: 1 !important;
-  flex-direction: column !important;
-  background: #ffffff !important;
+  justify-content: center !important;
+  align-items: center !important;
+  background: rgba(9, 18, 28, 0.88) !important; /* 深邃夜藍半透明背景 */
+  backdrop-filter: blur(12px) !important;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease !important;
 }
 
-/* 手機版（小於 680px）同步微調 */
-@media (max-width: 680px) {
-  .about-card.video-card {
-    min-height: 430px !important; /* 與手機版卡片高度一致 */
-  }
+/* 當啟用時淡入 */
+.video-popup-container.is-active {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* 彈出視窗主面板 */
+.video-popup-panel {
+  position: relative !important;
+  width: min(340px, 90vw) !important;  /* 👈 直式 Reels 的黃金響應式寬度 */
+  height: min(600px, 80dvh) !important; /* 👈 限制最高高度，不超出手機螢幕 */
+  aspect-ratio: 267 / 476 !important;   /* 👈 完美鎖定 FB 預設播放比例 */
+  background: #000 !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6) !important;
+  overflow: hidden !important;
+  transform: scale(0.9) !important;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1) !important;
+}
+
+.video-popup-container.is-active .video-popup-panel {
+  transform: scale(1) !important; /* 彈出時有輕微的放大回彈動效 */
+}
+
+/* 播放器 Iframe */
+.video-popup-panel iframe {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+}
+
+/* 關閉按鈕 */
+.video-popup-close {
+  position: absolute !important;
+  top: -48px !important;
+  right: 0 !important;
+  background: none !important;
+  border: none !important;
+  color: #fff !important;
+  font-size: 36px !important;
+  cursor: pointer !important;
+  line-height: 1 !important;
+  opacity: 0.7 !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+
+.video-popup-close:hover {
+  opacity: 1 !important;
+  transform: rotate(90deg) !important; /* 懸停時叉叉微轉 90 度，細節滿分 */
 }
