@@ -162,14 +162,26 @@
               </div>
               </article>
               <!-- 🎬 新插入的「FB 直式 Reels 影片卡片」 -->
-              <article class="about-card video-card">
-                <!-- 上半部：影片播放區 -->
-                <div class="video-wrapper">
-                  <iframe src="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1704471910587270%2F&show_text=false&width=267&t=0" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+              <article class="about-card video-card-trigger" data-video="https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1704471910587270%2F&show_text=false&width=267&t=0">
+                
+                <!-- 上半部：封面圖與精緻播放按鈕 (高度完美對齊 230px) -->
+                <div class="video-thumbnail-wrapper">
+                  <!-- ⚠️ 請將 src 替換為您的影片封面截圖路徑 -->
+                  <img src="img/關於我們/智匯桃園.jpg" alt="反詐騙及兒少性剝削預防犯罪宣導影片封面" loading="lazy" />
+                  
+                  <!-- 懸浮播放按鈕圖示 -->
+                  <div class="video-play-overlay">
+                    <div class="play-icon">
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                      </svg>
+                    </div>
+                  </div>
                 </div>
+              
                 <!-- 下半部：白色文字區 (與其他卡片完全對齊) -->
                 <div class="about-card-body">
-                  <h3>公私協力預防犯罪宣導影片合作</h3>
+                  <h3>公私協力宣導合作</h3>
                   <p>希望方程式參與警察局拍攝反詐騙及兒少性剝削預防犯罪宣導影片</p>
                 </div>
               </article>
