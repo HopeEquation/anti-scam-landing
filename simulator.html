@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>善良的重量｜AI 防詐情境互動模擬器</title>
+<style>
+  :root {
+    --bg: #f6f8fb;
+    --surface: #ffffff;
+    --surface-soft: #eaf3fa;
+    --text: #17202a;
+    --muted: #667085;
+    --line: #d9e2ec;
+    --primary: #e85d8c;
+    --primary-dark: #0a355c;
+    --button-primary: #e85d8c;
+    --button-primary-dark: #c94a76;
+    --accent: #e94f7c;
+    --warning: #f6b73c;
+    --shadow: 0 20px 50px rgba(22, 34, 51, 0.1);
+    --card-shadow: 0 10px 24px rgba(22, 34, 51, 0.06);
+    --radius: 8px;
+    --max: 680px;
+    --sans: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, -apple-system, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.65;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.8s ease, color 0.8s ease;
+  }
+
+  /* 主題環境色切換 */
+  body.warmA { --bg: #fdf5f7; --surface-soft: #fde8ef; --primary-dark: #3a1c25; }
+  body.warmB { --bg: #f4f7fa; --surface-soft: #e4ecf3; --primary-dark: #0c2d4a; }
+  body.warmC { --bg: #faf7f2; --surface-soft: #f4ecdf; --primary-dark: #33281c; }
+  body.cold { --bg: #eaf3fa; --surface: #ffffff; --text: #0a355c; --line: #b9d1e8; }
+  body.night {
+    --bg: #091726;
+    --surface: #102336;
+    --surface-soft: #162f48;
+    --text: #f0f6fc;
+    --muted: #8ca4bd;
+    --line: #223f5e;
+    --primary-dark: #ffffff;
+    --card-shadow: 0 14px 30px rgba(0, 0, 0, 0.45);
+  }
+
+  /* 頂部毛玻璃導覽列 */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid rgba(217, 226, 236, 0.8);
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(16px) saturate(160%);
+    box-shadow: 0 4px 20px rgba(22, 34, 51, 0.04);
+  }
+  body.night .site-header {
+    background: rgba(9, 23, 38, 0.88);
+    border-bottom: 1px solid rgba(34, 63, 94, 0.8);
+  }
+  .header-inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--primary-dark);
+  }
+  .brand-badge {
+    background: var(--surface-soft);
+    color: var(--primary);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 3px 8px;
+    border-radius: 999px;
+  }
+  .header-line-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: var(--button-primary);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(232, 93, 140, 0.25);
+    transition: transform 180ms ease, background 180ms ease;
+  }
+  .header-line-btn:hover {
+    background: var(--button-primary-dark);
+    transform: translateY(-1px);
+  }
+
+  /* 主舞台 Stage */
+  #stage {
+    width: 100%;
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 44px 24px 100px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 頂部場景標籤 */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    padding: 5px 14px;
+    margin-bottom: 24px;
+    border-radius: 999px;
+    background: var(--surface-soft);
+    color: var(--primary-dark);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    min-height: 28px;
+  }
+  body.night .tag {
+    background: var(--surface-soft);
+    color: var(--primary);
+  }
+
+  /* 內文排版 */
+  #text p {
+    font-size: 18px;
+    line-height: 1.85;
+    margin-bottom: 1.15em;
+    opacity: 0;
+    transform: translateY(8px);
+    animation: appear 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  #text p.big {
+    font-size: clamp(26px, 4.5vw, 36px);
+    line-height: 1.3;
+    font-weight: 900;
+    color: var(--primary-dark);
+    margin-bottom: 0.6em;
+  }
+  #text p.said {
+    padding: 14px 18px;
+    border-left: 4px solid var(--primary);
+    background: var(--surface);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    border-top: 1px solid var(--line);
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    box-shadow: 0 4px 12px rgba(22, 34, 51, 0.03);
+  }
+  body.night #text p.said {
+    background: var(--surface);
+    color: var(--text);
+  }
+  #text p.mark {
+    color: var(--primary);
+    font-weight: 800;
+  }
+  #text p.small {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  @keyframes appear { to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    #text p, .step, .door { animation: none !important; opacity: 1 !important; transform: none !important; }
+    body { transition: none; }
+  }
+
+  /* 選項容器 */
+  #choices {
+    margin-top: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* 🎯 全域按鈕統一樣式：全面統一為品牌桃紅色，消除任何視覺混淆 */
+  button {
+    font-family: var(--sans);
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 1.45;
+    padding: 16px 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--button-primary);
+    background: var(--button-primary);
+    color: #ffffff;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 10px 24px rgba(232, 93, 140, 0.24);
+    transition: all 180ms ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  button:hover {
+    background: var(--button-primary-dark);
+    border-color: var(--button-primary-dark);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(232, 93, 140, 0.35);
+  }
+  button:active {
+    transform: scale(0.985);
+    box-shadow: 0 6px 14px rgba(232, 93, 140, 0.2);
+  }
+  button:focus-visible {
+    outline: 3px solid rgba(232, 93, 140, 0.4);
+    outline-offset: 2px;
+  }
+
+  /* 門卡樣式（專屬於主選單的關卡選擇卡） */
+  button.door {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--card-shadow);
+    opacity: 0;
+    animation: appear 0.45s ease forwards;
+  }
+  button.door:hover {
+    border-color: var(--primary);
+    background: #ffffff;
+    color: var(--text);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(22, 34, 51, 0.08);
+  }
+  button.door span {
+    display: block;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--primary-dark);
+  }
+  button.door small {
+    display: block;
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+  button.door .done {
+    display: inline-block;
+    color: #fff;
+    background: var(--primary);
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 999px;
+    margin-top: 8px;
+  }
+  body.night button.door {
+    background: var(--surface);
+    border-color: var(--line);
+    color: var(--text);
+  }
+  body.night button.door span {
+    color: var(--text);
+  }
+
+  /* 倒帶步驟卡片 */
+  .step {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--primary);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    background: var(--surface);
+    box-shadow: 0 6px 18px rgba(22, 34, 51, 0.04);
+    opacity: 0;
+    animation: appear 0.45s ease forwards;
+  }
+  .step h3 {
+    font-size: 16px;
+    font-weight: 900;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+  }
+  .step p {
+    font-size: 15px !important;
+    line-height: 1.75 !important;
+    margin-bottom: 6px !important;
+    color: var(--muted) !important;
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .step .hit {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+    background: var(--accent);
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-top: 8px;
+  }
+
+  /* 🎯 結尾專屬 LINE 官方帳號卡片 */
+  .line-cta-card {
+    margin-top: 36px;
+    padding: 26px 24px;
+    border: 1.5px solid rgba(232, 93, 140, 0.35);
+    border-radius: var(--radius);
+    background: var(--surface);
+    box-shadow: 0 14px 34px rgba(22, 34, 51, 0.08);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+  .line-cta-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--primary);
+    background: var(--surface-soft);
+    padding: 4px 12px;
+    border-radius: 999px;
+  }
+  .line-cta-title {
+    font-size: 21px;
+    font-weight: 900;
+    color: var(--primary-dark);
+    margin: 0;
+  }
+  body.night .line-cta-title {
+    color: #ffffff;
+  }
+  .line-cta-desc {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin: 0;
+    max-width: 480px;
+  }
+  .line-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 380px;
+    margin-top: 8px;
+    padding: 16px 22px;
+    border-radius: var(--radius);
+    background: #06c755; /* LINE 官方代表色 */
+    color: #ffffff !important;
+    font-size: 16px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 10px 22px rgba(6, 199, 85, 0.28);
+    transition: all 180ms ease;
+  }
+  .line-cta-btn:hover {
+    background: #05b04c;
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(6, 199, 85, 0.38);
+  }
+  .line-cta-btn svg {
+    flex-shrink: 0;
+  }
+
+  .credit {
+    margin-top: 36px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.8;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand-title">
+      AI 防詐小幫手
+      <span class="brand-badge">情境模擬</span>
+    </div>
+    <a href="https://lin.ee/wIxEnCH" target="_blank" rel="noopener noreferrer" class="header-line-btn">
+      加入官方帳號
+    </a>
+  </div>
+</header>
+
+<div id="stage">
+  <div class="tag" id="tag"></div>
+  <div id="text"></div>
+  <div id="choices"></div>
+</div>
+
+<script>
+(function(){
+  const T = document.getElementById('text'), C = document.getElementById('choices'), TAG = document.getElementById('tag');
+  let lastResult = '';
+  const rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let F = {};
+  const done = { a: false, b: false, c: false };
+
+  function setBody(cls) { document.body.className = cls || ''; }
+  function show(node) {
+    T.innerHTML = ''; C.innerHTML = ''; TAG.textContent = node.tag || '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    (node.lines || []).forEach((ln, i) => {
+      const p = document.createElement('p');
+      if (typeof ln === 'string') { p.textContent = ln; } else { p.textContent = ln.t; if (ln.c) p.className = ln.c; }
+      p.style.animationDelay = (i * 0.24) + 's'; T.appendChild(p);
+    });
+    const delay = rm ? 0 : (((node.lines || []).length * 0.24 + 0.25) * 1000);
+    setTimeout(() => {
+      (node.choices || []).forEach(ch => {
+        const b = document.createElement('button');
+        b.textContent = (typeof ch.t === 'function') ? ch.t() : ch.t;
+        b.onclick = () => { if (ch.do) ch.do(); if (ch.next) go(ch.next); };
+        C.appendChild(b);
+      });
+      if (node.render) node.render();
+    }, delay);
+  }
+
+  const S = {};
+  function go(id) { const n = S[id]; if (n.enter) n.enter(); show(n); }
+
+  function doShare(btn) {
+    const text = '「善良的重量」三個你以為你不會中的防詐模擬\n' + (lastResult ? ('我剛剛' + lastResult + '\n') : '') + '換你走走看：\n' + location.href;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).catch(() => {});
+    }
+    if (btn) btn.textContent = '已複製分享連結';
+    if (navigator.share) {
+      navigator.share({ title: '善良的重量｜AI 防詐小幫手', text: text }).catch(() => {});
+    }
+  }
+
+  function addShareCTA(container) {
+    const s1 = document.createElement('button');
+    s1.textContent = '把這個測驗，傳給你在乎的人';
+    s1.onclick = () => doShare(s1);
+    container.appendChild(s1);
+  }
+
+  /* 🎯 渲染 LINE 官方帳號導流卡片 */
+  function renderLineCTA(container) {
+    const card = document.createElement('div');
+    card.className = 'line-cta-card';
+    card.innerHTML = `
+      <div class="line-cta-badge">官方認證</div>
+      <h3 class="line-cta-title">AI 防詐小幫手．守護你的安全</h3>
+      <p class="line-cta-desc">日常對話遇到可疑訊息、求證來電或不明連結？隨時把截圖與文字傳給小幫手，即時為你分析話術與風險等級。</p>
+      <a href="https://lin.ee/wIxEnCH" target="_blank" rel="noopener noreferrer" class="line-cta-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.03 2 11c0 3.12 1.77 5.88 4.47 7.42-.2.74-.75 2.76-.86 3.19-.14.54.2.53.42.38.17-.11 2.37-1.61 3.32-2.26.85.18 1.74.27 2.65.27 5.52 0 10-4.03 10-9S17.52 2 12 2z"/></svg>
+        立即加入 LINE 官方帳號
+      </a>
+    `;
+    container.appendChild(card);
+  }
+
+  /* ============ 開場 ============ */
+  S.landing = {
+    enter() { setBody(''); },
+    lines: [
+      { t: '善良的重量', c: 'big' },
+      '等一下，你會走進三個局。',
+      '一通深夜的求救電話，一次舊識的溫暖問候，一場客氣順利的二手出清。',
+      '它們都是真實話術的改編，背後的場景完全不同。',
+      '但它們精準鎖定著人性最容易破防的一處裂縫。',
+      '你的任務只有一個：',
+      { t: '走到最後，守住你的信任與帳戶', c: 'mark' },
+      { t: '大部分的人，都覺得自己不可能受騙。', c: 'small' },
+      { t: '帶著這份自信走進去的人，往往陷得最深。', c: 'small' }
+    ],
+    choices: [{ t: '我準備好了，開始體驗', next: 'menu' }]
+  };
+
+  /* ============ 選單 ============ */
+  S.menu = {
+    enter() { setBody(''); F = {}; },
+    lines: [
+      { t: '三扇門', c: 'big' },
+      { t: '選一扇門，走進生活日常裡的真實盲區', c: 'small' }
+    ],
+    render() {
+      const doors = [
+        ['a', '深夜的急難來電', '凌晨兩點，熟識之人的聲音在電話那頭焦急哭泣'],
+        ['b', '懂你辛苦的舊識', '每天被責任推著走，很久沒人關心你過得累不累'],
+        ['c', '過於客氣的買家', '出清一件二手物品，你只想乾脆、順利地完成']
+      ];
+      doors.forEach((d, i) => {
+        const b = document.createElement('button');
+        b.className = 'door';
+        b.style.animationDelay = (i * 0.12) + 's';
+        b.innerHTML = '<span></span><small></small>';
+        b.querySelector('span').textContent = d[1];
+        b.querySelector('small').textContent = d[2];
+        if (done[d[0]]) {
+          const s = document.createElement('small');
+          s.className = 'done';
+          s.textContent = '已完成體驗';
+          b.appendChild(s);
+        }
+        b.onclick = () => go(d[0] + '_intro');
+        C.appendChild(b);
+      });
+      if (done.a || done.b || done.c) {
+        const b = document.createElement('button');
+        b.style.marginTop = '10px';
+        b.textContent = '核心解析：為什麼詐騙的第一步，都是溫度？';
+        b.onclick = () => go('finale');
+        C.appendChild(b);
+        addShareCTA(C);
+      }
+    },
+    choices: []
+  };
+
+  /* ============ 局 A：深夜的急難來電 ============ */
+  S.a_intro = {
+    enter() { setBody('warmA'); F = { rush: 0, verify: 0, hesitate: 0, swiped: null }; },
+    lines: [
+      { t: '走進這段日常', c: 'big' },
+      '心裡想著那個你最在乎、此刻卻不在身邊的人。',
+      '可能在異地打拼、在求學，或是同住但今晚因事未歸。',
+      '你很關心對方，但平時大家都很忙，日常聯絡總是簡短平淡。',
+      '凌晨兩點十七分，手機突然劇烈震動。'
+    ],
+    choices: [{ t: '接起這通陌生號碼', next: 'a_call' }]
+  };
+  S.a_call = {
+    tag: '凌晨 02:17',
+    lines: [
+      '電話接通，耳邊傳來急促粗重的呼吸聲與車輛呼嘯的背景音。',
+      { t: '「是我⋯⋯你現在旁邊有人嗎？」', c: 'said' },
+      '那是你最熟悉的聲音，語氣、換氣停頓都分毫不差。',
+      '但那聲音抖得厲害，帶著瀕臨崩潰的哭腔。'
+    ],
+    choices: [
+      { t: '「怎麼了？！你人在哪裡？出什麼事了？」', do: () => F.rush = 1, next: 'a_crisis' },
+      { t: '「先冷靜，你原本的手機呢？這誰的號碼？」', do: () => F.verify = 1, next: 'a_doubt' }
+    ]
+  };
+  S.a_doubt = {
+    tag: '電話通話中',
+    lines: [
+      { t: '「我手機撞爛了！這是借路人的電話打的！」', c: 'said' },
+      '電話另一頭傳來刺耳的鳴笛聲與嘈雜叫罵聲。',
+      { t: '「我現在沒辦法多解釋，事情很嚴重⋯⋯」', c: 'said' },
+      '對方的慌亂透過話筒完全傳染給了你。'
+    ],
+    choices: [{ t: '「好，你慢慢說，到底發生什麼事」', next: 'a_crisis' }]
+  };
+  S.a_crisis = {
+    tag: '電話通話中',
+    lines: [
+      { t: '「我剛剛在路上擦撞到人，對方的車很貴，人受傷了在叫救護車」', c: 'said' },
+      { t: '「對方說半小時內拿出十萬醫藥保證金，簽和解書就不叫警察」', c: 'said' },
+      { t: '「不然等警察一來做筆錄、扣車移送，我下週的執照面試就全毀了⋯⋯」', c: 'said' },
+      '電話那端傳來一句壓低、極其無助的懇求：',
+      { t: '「拜託你，先不要跟家裡其他人講，大家一慌只會把事情鬧大」', c: 'said' },
+      { t: '「只有你能幫我了」', c: 'mark' }
+    ],
+    choices: [
+      { t: '打開手機網銀準備轉帳支援', do: () => F.swiped = true, next: 'a_reveal' },
+      { t: '「你把電話給旁邊的人，我來跟對方談」', next: 'a_pressure' }
+    ]
+  };
+  S.a_pressure = {
+    tag: '電話通話中',
+    lines: [
+      '對方在電話裡失控哭了出來：',
+      { t: '「對方根本不肯接電話！他們圍著我，只要看到戶頭入帳證明」', c: 'said' },
+      { t: '「剩下不到二十分鐘了，你現在去聯絡別人，時間就過了啊！」', c: 'said' },
+      '背景裡傳來陌生人暴躁的催促咆哮。',
+      '你的心臟狂跳，每一秒的猶豫都像在折磨你。'
+    ],
+    choices: [
+      { t: '不忍心讓對方承擔後果，按下轉帳', do: () => { F.swiped = true; F.hesitate++; }, next: 'a_reveal' },
+      { t: '咬牙掛斷電話，直接撥打對方的原本號碼與通訊軟體查證', do: () => F.swiped = false, next: 'a_reveal' }
+    ]
+  };
+  S.a_reveal = {
+    enter() { buildReveal('a', '十萬元'); },
+    lines: [], choices: []
+  };
+  const stepsA = () => [
+    ['一、聲紋仿造已無門檻', '僅需數秒公開影音，AI 即可生成帶有情緒哭腔、換氣聲的極度逼真語音。', true],
+    ['二、環境音效摧毀冷靜', '背景的警笛、叫罵與車流聲，是刻意配置的情境音效，目的在癱瘓你的思考餘裕。', F.rush],
+    ['三、時間熔斷機制', '「只剩二十分鐘」不是為了爭取時間，而是切斷所有理性求證的可能。', true],
+    ['四、以在乎為名的封口令', '「別跟其他人講」，精準封鎖身邊親友相互提醒的最後防護網。', true],
+    ['五、責任綁架與關心則亂', '將問題提升至「一生前途」，利用你對重要之人的保護欲，讓人甘願冒險。', F.swiped !== false]
+  ];
+  S.a_defend = {
+    tag: '如何防守這局？',
+    lines: [
+      '面對任何涉及人身危機的深夜求助，牢記唯一的防守原則：',
+      { t: '「天大的急事，都經得起掛掉查證。」', c: 'big' },
+      '正規的急難救助程序，絕不會仰賴一通「掛斷就失聯」的私人急匯。',
+      '掛斷通話，透過原本號碼、通訊軟體、同住夥伴或撥打 110、165 求證。',
+      '或者，平時約定一個「只有你們彼此知道、從未公開提過」的安全通關密語。',
+      '技術能生成聲音，但無法生成真實的生活記憶。'
+    ],
+    choices: [{ t: '完成這局體驗', do: () => done.a = true, next: 'menu' }]
+  };
+
+  /* ============ 局 B：懂你辛苦的舊識 ============ */
+  S.b_intro = {
+    enter() { setBody('warmB'); F = { warmup: 0, ask: 0, group: 0, taste: 0, hesitate: 0, swiped: null }; },
+    lines: [
+      { t: '換一段生活狀態', c: 'big' },
+      '你是一個每天腳踏實地、認真對待工作與責任的人。',
+      '但生活日復一日，各項開銷沉沉壓在肩上。',
+      '上週深夜發了一則略帶疲倦的限時動態，隨後又覺得矯情，五分鐘後自己默默刪除。',
+      '隔天依舊若無其事地維持日常運轉。'
+    ],
+    choices: [{ t: '我準備好了', next: 'b_dm' }]
+  };
+  S.b_dm = {
+    tag: '平日深夜',
+    lines: [
+      '通訊軟體跳出一則訊息，來自很久沒深聊的朋友。',
+      '彼此知道名字，但幾年沒什麼交集。',
+      { t: '「剛剛好像看到你發動態又刪掉，還好嗎？」', c: 'said' },
+      { t: '「沒有要幹嘛啦，剛好滑到，想說問一聲」', c: 'said' },
+      '你們有一搭沒一搭地聊著。',
+      '對方完全不問敏感隱私，只是安靜聽你訴說對現狀的無力與倦怠。',
+      '訊息結束前你突然意識到：',
+      { t: '好久沒有人，只是單純問你一句「過得累不累」了', c: 'mark' }
+    ],
+    choices: [
+      { t: '「謝謝你，改天喝杯東西聊聊」', do: () => F.warmup = 1, next: 'b_meet' },
+      { t: '客氣道謝，打算點到為止', next: 'b_dmB' }
+    ]
+  };
+  S.b_dmB = {
+    tag: '隔天下午',
+    lines: [
+      '對方回傳：',
+      { t: '「不勉強約啦，大家平常都在硬撐」', c: 'said' },
+      { t: '「只是覺得大家都不容易，能找個懂的人說說話也好」', c: 'said' },
+      '這句話精準擊中了你緊繃已久的防備。'
+    ],
+    choices: [{ t: '「⋯⋯好，週末喝杯咖啡吧」', do: () => F.warmup = 1, next: 'b_meet' }]
+  };
+  S.b_meet = {
+    tag: '週末・咖啡館',
+    lines: [
+      '對方先到了，整體狀態看起來異常從容、鬆弛。',
+      '見面時沒有任何推銷或炫耀，全程都在關心你的生活。',
+      '結帳時對方自然地先拿手機結清：',
+      { t: '「我來就好，這陣子生活比較順，你跟我別客氣」', c: 'said' },
+      '你看著對方的從容，再對比自己每天被瑣事追著跑的疲憊。'
+    ],
+    choices: [{ t: '「你看起來狀態很好，最近在忙什麼？」忍不住好奇', do: () => F.ask = 1, next: 'b_tease' }]
+  };
+  S.b_tease = {
+    tag: '週末・咖啡館',
+    lines: [
+      '對方笑了笑，語氣很淡：',
+      { t: '「就自己摸索了一些數據工具，做一點分散配置」', c: 'said' },
+      { t: '「不過我先說，這不一定適合每個人，純粹是我自己想多點選擇權」', c: 'said' },
+      '對方越是保留，你越覺得這是一個踏實存在的可能。'
+    ],
+    choices: [
+      { t: '「可以跟我說說看嗎？我想多了解」', next: 'b_group' },
+      { t: '「滿特別的」先不主動追問', next: 'b_teaseB' }
+    ]
+  };
+  S.b_teaseB = {
+    tag: '回家的路上',
+    lines: [
+      '對方真的沒有再聊這個話題，只是談談生活趣事。',
+      '但回到安靜的住處，對比那份「從容」，你忍不住主動發了訊息：',
+      { t: '「今天說的那個配置，能借我參考一下嗎？」', c: 'said' }
+    ],
+    choices: [{ t: '對方傳來了一個LINE社群邀請', next: 'b_group' }]
+  };
+  S.b_group = {
+    tag: '加入LINE社群',
+    lines: [
+      { t: '「你先看大家怎麼交流就好，不用急著參與」', c: 'said' },
+      '對方把你加入了LINE社群裡沒有誇張的暴富口號，都是認真生活的人在分享進度。',
+      '有人說「終於敢把平日的兼職推掉了」，有人說「心態踏實很多」。',
+      '你看了一週，疑慮漸漸被平靜取代。'
+    ],
+    choices: [{ t: '詢問如何先小額嘗試', do: () => F.group = 1, next: 'b_taste' }]
+  };
+  S.b_taste = {
+    tag: '兩週後',
+    lines: [
+      '你投入了一筆不影響生活的小額資金嘗試。',
+      '兩週後系統顯示結算，帳面產生了正常合理的回報。',
+      '你嘗試按下提領——',
+      '款項在十分鐘內，準時進到了你的實體銀行帳戶。',
+      '那一刻你想的不是風險：',
+      { t: '原來這真的能成為改變沉重生活的一個出口', c: 'mark' }
+    ],
+    choices: [{ t: '繼續往下走', do: () => F.taste = 1, next: 'b_final' }]
+  };
+  S.b_final = {
+    tag: '第三週',
+    lines: [
+      '對方私訊你一張內部調整公告：',
+      { t: '「內部存取機制即將升級，接下來會提高門檻」', c: 'said' },
+      { t: '「現有成員只有今晚能鎖定名額，基礎配置需要二十萬」', c: 'said' },
+      '你猶豫著說想跟身邊親近的人商量一下。',
+      '對方語氣依舊平靜溫和：',
+      { t: '「我理解，但沒接觸過這套邏輯的人，第一反應一定是叫你停在原地」', c: 'said' },
+      { t: '「我不勉強你，只是覺得你值得更好的生活節奏」', c: 'said' }
+    ],
+    choices: [
+      { t: '把握機會，轉入款項鎖定名額', do: () => F.swiped = true, next: 'b_reveal' },
+      { t: '「這筆金額太大，我真的要再想幾天」', next: 'b_pressure' }
+    ]
+  };
+  S.b_pressure = {
+    tag: '深夜 23:40',
+    lines: [
+      'LINE社群陸續有人回報「名額已保留」。',
+      '距離截止只剩二十分鐘。',
+      '對方傳來最後一句話：',
+      { t: '「沒事，如果你覺得現在這樣日復一日的生活也很好，那就先不用勉強」', c: 'said' },
+      '這句話沒有施壓，卻直刺你內心最深的疲憊：',
+      { t: '你真的很想擺脫現在這個喘不過氣的循環', c: 'mark' }
+    ],
+    choices: [
+      { t: '在最後一刻將款項轉出', do: () => { F.swiped = true; F.hesitate++; }, next: 'b_reveal' },
+      { t: '關掉螢幕，強制自己上床睡覺', do: () => F.swiped = false, next: 'b_reveal' }
+    ]
+  };
+  S.b_reveal = {
+    enter() { buildReveal('b', '二十萬元'); },
+    lines: [], choices: []
+  };
+  const stepsB = () => [
+    ['一、共情疲憊，卸下心防', '不談利益，只關心你的勞累，建立起稀缺的理解與信任。', F.warmup],
+    ['二、展示鬆弛感引導追問', '「我請得起、我過得比較順」，用生活狀態的差距讓你主動尋求答案。', F.ask],
+    ['三、欲擒故縱的邊界感', '「這不一定適合每個人」，營造客觀假象，使主控權看似全在你自己手裡。', true],
+    ['四、真實出金的信任陷阱', '用小額利潤與順暢出金買下你最終的信任，這是所有資金盤必經的誘餌期。', F.taste],
+    ['五、切斷身邊的客觀建議', '把親友的理性提醒包裝成「拉住你改變的阻礙」，徹底孤立你的判斷。', F.swiped !== false]
+  ];
+  S.b_defend = {
+    tag: '如何防守這局？',
+    lines: [
+      '當有人陷入這類精密的局時，直指對方「貪心」往往只會激起防禦心。',
+      '因為對方想買的不是暴富，而是**對生活的喘息空間與希望**。',
+      '此時最有效的一句話是：',
+      { t: '「這套機制，敢不敢讓第三方的專業機構查核？」', c: 'big' },
+      '真正健康的財務管道，從不怕公開透明檢驗；',
+      '急於要在今晚下決定的，全是在賭你那一瞬間的疲憊與脆弱。'
+    ],
+    choices: [{ t: '完成這局體驗', do: () => done.b = true, next: 'menu' }]
+  };
+
+  /* ============ 局 C：過於客氣的買家 ============ */
+  S.c_intro = {
+    enter() { setBody('warmC'); F = { polite: 0, guilt: 0, service: 0, hesitate: 0, swiped: null }; },
+    lines: [
+      { t: '再換一個日常片刻', c: 'big' },
+      '家裡放著一件你用不到、但狀況良好的閒置物品。',
+      '你拍了照，放上二手拍賣平台。',
+      '定價不高，只希望能順利出清，清出生活空間。',
+      '你最怕遇到囉嗦砍價、約好又消失的人。',
+      '你只想乾脆、順利地完成這件小事。'
+    ],
+    choices: [{ t: '我準備好了', next: 'c_msg' }]
+  };
+  S.c_msg = {
+    tag: '刊登後十分鐘',
+    lines: [
+      '平台跳出新訊息通知。',
+      '對方的頭像乾淨樸素，文字開頭用的是「您好」：',
+      { t: '「您好，請問這件商品還在嗎？不好意思打擾您休息了。」', c: 'said' },
+      '對方一句價都沒殺，甚至體貼補充：',
+      { t: '「我很喜歡這個，價格完全沒問題，運費我也會全額負擔。」', c: 'said' },
+      { t: '「您方便的時間再寄出就好，辛苦您了！」', c: 'said' },
+      '在充滿惡意殺價的二手環境裡：',
+      { t: '遇到這麼客氣禮貌的人，你心裡瞬間放鬆了一大半', c: 'mark' }
+    ],
+    choices: [
+      { t: '「還在喔，可以直接下單，謝謝你！」', do: () => F.polite = 1, next: 'c_deal' },
+      { t: '回覆商品狀態，確認寄送方式', next: 'c_deal' }
+    ]
+  };
+  S.c_deal = {
+    tag: '兩分鐘後',
+    lines: [
+      '對方很快回訊：',
+      { t: '「太好了！因為我有平台補助金，想用官方保障的專屬連結結帳」', c: 'said' },
+      { t: '「我剛按了結帳，但系統好像跳出錯誤，您有收到嗎？」', c: 'said' },
+      '接著傳來一張截圖，中央跳著顯眼的紅色警示：',
+      { t: '『訂單失敗：賣方帳戶尚未完成「金流安全協議簽署」，買方款項已凍結扣留。』', c: 'big' }
+    ],
+    choices: [{ t: '點開截圖仔細看', next: 'c_glitch' }]
+  };
+  S.c_glitch = {
+    tag: '交易卡關',
+    lines: [
+      '你看著截圖，還沒反應過來。',
+      '對方接連傳來好幾則訊息，文字裡全是焦急，卻還在為你著想：',
+      { t: '「對不起！我的帳戶扣款成功了，但款項被卡在金流中心」', c: 'said' },
+      { t: '「系統說是因為您那邊還沒驗證，結果害我的帳號也被限制交易了⋯⋯」', c: 'said' },
+      { t: '「真的很不好意思給您添麻煩，我不知道會這樣⋯⋯」', c: 'said' },
+      '你看著對方的自責道歉，心裡頓時湧上一陣內疚：',
+      { t: '自己只是出清閒置物，怎麼反而害到別人？', c: 'mark' }
+    ],
+    choices: [
+      { t: '「別緊張，我看看怎麼幫你處理」', do: () => F.guilt = 1, next: 'c_service' },
+      { t: '「這是我第一次遇到，要怎麼解開？」', do: () => F.guilt = 1, next: 'c_service' }
+    ]
+  };
+  S.c_service = {
+    tag: '對話中',
+    lines: [
+      '對方立刻傳來一個帶有平台 Logo 的客服連結：',
+      { t: '「客服剛傳這個給我，說賣家點進去完成身分核實，我的錢就會退回，您的賣場也會恢復正常」', c: 'said' },
+      { t: '「只要兩分鐘快速認證就好，拜託您了，真的很謝謝您的耐心」', c: 'said' },
+      '你點開連結，跳出看似專業的線上客服視窗，要求輸入銀行帳戶進行驗證代碼配對：',
+      { t: '『本作業僅為雙向金流通道核實，絕不會扣除任何款項。』', c: 'said' }
+    ],
+    choices: [
+      { t: '按照指示準備進行驗證操作', do: () => F.service = 1, next: 'c_final' },
+      { t: '停下動作，覺得交易流程不太對勁', next: 'c_pressure' }
+    ]
+  };
+  S.c_pressure = {
+    tag: '猶豫的瞬間',
+    lines: [
+      '你停了下來，思考拍賣交易為何要跳出外部網頁驗證？',
+      '買家此時又傳來訊息，語氣充滿不安：',
+      { t: '「您那邊還順利嗎？我的帳戶現在餘額顯示異常，客服說超過十分鐘會凍結」', c: 'said' },
+      { t: '「那是我這個月的生活費⋯⋯真的很抱歉催您，只要認證完就好，能麻煩您盡快嗎？」', c: 'said' },
+      '對方的客氣與焦慮，像一塊沉重的石頭壓在心上：',
+      { t: '拒絕他，好像顯得自己是個冷血又不負責任的麻煩製造者', c: 'mark' }
+    ],
+    choices: [
+      { t: '不想連累對方，照著客服指示輸入資料', do: () => { F.swiped = true; F.hesitate++; }, next: 'c_reveal' },
+      { t: '關閉網頁，回到原拍賣 APP 尋求正版官方查證', do: () => F.swiped = false, next: 'c_reveal' }
+    ]
+  };
+  S.c_final = {
+    tag: '驗證頁面',
+    lines: [
+      '假客服介面要求輸入手機收到的銀行簡訊 OTP 認證碼。',
+      '買家同步在對話框傳來一句：',
+      { t: '「真的太感謝您了，遇到您這樣負責任的賣家是我的幸運。」', c: 'said' },
+      '你看著簡訊上的六位數密碼，指尖停在確認鍵上。'
+    ],
+    choices: [
+      { t: '送出驗證碼', do: () => F.swiped = true, next: 'c_reveal' },
+      { t: '猛然警醒，立即關閉視窗', do: () => { F.swiped = false; F.hesitate++; }, next: 'c_reveal' }
+    ]
+  };
+  S.c_reveal = {
+    enter() { buildReveal('c', '帳戶權限與存款'); },
+    lines: [], choices: []
+  };
+  const stepsC = () => [
+    ['一、極致客氣的心理麻醉', '不殺價、體貼寄件、連續道謝，建立「遇到好買家」的預期，徹底卸下防禦。', F.polite],
+    ['二、反轉受害者位置', '偽造系統錯誤截圖，把「他要買東西」逆轉成「你的疏忽害他被凍結」，搶奪話語權。', true],
+    ['三、武器化責任心與善意', '利用人性中「不想給人添麻煩」的自省特質，讓拒絕變成一種道德罪惡。', F.guilt],
+    ['四、高仿假客服與偽造協議', '偽造官方網址與金流協議術語，誘使你脫離安全防護的原生拍賣平台。', F.service],
+    ['五、「認證不是扣款」的語言欺騙', '將資金轉出或綁定約定轉帳包裝成「通道安全核實」，混淆真實的金流操作。', F.swiped !== false]
+  ];
+  S.c_defend = {
+    tag: '如何防守這局？',
+    lines: [
+      '在日常二手交易中，請記住一條核心鐵律：',
+      { t: '「所有要求你『離開平台點外部連結認證』的，全部都是假的。」', c: 'big' },
+      '正規交易平台的金流通知，只會存在於官方 APP 內建的系統通知匣內。',
+      '當心裡浮現「對方好可憐、好像是我害的」時，請默念這句護身咒：',
+      { t: '「對方的帳戶問題只有官方能處理；你只是賣東西的人，不是金流工程師。」', c: 'said' },
+      '永遠不要用自己的帳戶安全，去替別人的禮貌與焦慮買單。'
+    ],
+    choices: [{ t: '完成這局體驗', do: () => done.c = true, next: 'menu' }]
+  };
+
+  /* ============ 揭曉與覆盤 ============ */
+  function buildReveal(branch, money) {
+    const L = [];
+    const name = branch === 'a' ? '深夜的急難來電' : branch === 'b' ? '懂你辛苦的舊識' : '過於客氣的買家';
+    lastResult = F.swiped ? ('在「' + name + '」被突破了防線（幸好是模擬的）') : ('在「' + name + '」守住了防線，但猶豫過好幾次');
+    if (F.swiped) {
+      L.push({ t: '你的防線被突破了', c: 'big' });
+      L.push('先別急著自責或懊惱。');
+      L.push('回頭看看，每一步都是精心對準人性脆弱點的推演。');
+      if (F.hesitate > 0) L.push('你其實猶豫過，但每一次猶豫，都有人在旁邊加壓或接住。');
+    } else {
+      L.push({ t: '你成功守住了防線', c: 'big' });
+      L.push('不過先別急著覺得自己天生免疫。');
+      if (F.hesitate > 0) L.push('剛剛有幾個瞬間，你差一點就點了下去。');
+      L.push('而且你是帶著「這是一場測驗」的防備走進來的。');
+      L.push('真實世界裡的局，永遠不會先附上劇本標題。');
+    }
+    L.push({ t: '我們把剛才的陷阱倒帶一次', c: 'small' });
+    const node = S[branch + '_reveal'];
+    node.lines = L;
+    node.choices = [{ t: '倒帶覆盤這局話術', do: () => setBody('cold'), next: branch + '_steps' }];
+  }
+
+  ['a', 'b', 'c'].forEach(br => {
+    S[br + '_steps'] = {
+      tag: '覆盤倒帶',
+      lines: [],
+      render() {
+        const steps = br === 'a' ? stepsA() : br === 'b' ? stepsB() : stepsC();
+        steps.forEach((s, i) => {
+          const d = document.createElement('div');
+          d.className = 'step';
+          d.style.animationDelay = (i * 0.25) + 's';
+          d.innerHTML = '<h3></h3><p></p>';
+          d.querySelector('h3').textContent = s[0];
+          d.querySelector('p').textContent = s[1];
+          if (s[2]) {
+            const t = document.createElement('span');
+            t.className = 'hit';
+            t.textContent = '剛剛，這一步踩進了你的心理盲區';
+            d.appendChild(t);
+          }
+          T.appendChild(d);
+        });
+        const b = document.createElement('button');
+        b.textContent = '那要怎麼防守？';
+        b.onclick = () => go(br + '_defend');
+        C.appendChild(b);
+      },
+      choices: []
+    };
+  });
+
+  /* ============ 終章 ============ */
+  S.finale = {
+    enter() { setBody('cold'); },
+    lines: [
+      { t: '最後一件事', c: 'big' },
+      '走過這三個局，情境完全不同。',
+      '親人的急難、舊識的同理、買家的體貼。',
+      '但你有沒有發現：',
+      { t: '第一步，全部一模一樣', c: 'mark' },
+      '急難的局，第一步是那個你最熟悉、讓你掛念的聲音；',
+      '舊友的局，第一步是有人讀懂你的疲憊，安靜聽你說話；',
+      '交易的局，第一步是有人極度客氣體貼，甚至先跟你道歉。',
+      '沒有任何一個局，是從惡意或冷酷開始的。',
+      { t: '全部都是從「溫度」開始的', c: 'big' },
+      '他們比我們更懂得：人在感到被在乎、感到內疚、或急於保護身邊人時，理智是最脆弱的。'
+    ],
+    choices: [{ t: '所以，我們該怎麼辦？', do: () => setBody('night'), next: 'ending' }]
+  };
+
+  S.ending = {
+    lines: [
+      '防詐從來不是智商的較量，而是「情緒與冷靜時間」的拔河。',
+      '當局者迷不是因為愚蠢，而是因為身處其中的人，那一刻滿滿都是人性。',
+      '我們需要一個第三方的冷靜角色——',
+      { t: '在你心跳加速時，提醒你「掛掉重撥」', c: 'big' },
+      { t: '在你感到孤單時，提醒你「先讓專業查證」', c: 'big' },
+      { t: '在你滿懷內疚時，提醒你「這不是你的過錯」', c: 'big' },
+      '那個角色，可以是一個客觀冷靜的 AI 防詐小幫手，',
+      '也可以是我們願意隨時互通電話、不帶指責的彼此。'
+    ],
+    render() {
+      renderLineCTA(T);
+      const cr = document.createElement('div');
+      cr.className = 'credit';
+      cr.innerHTML = 'AI 防詐小幫手｜守護每一份良善與信任<br>多一分冷靜查證，少一次不可逆的遺憾';
+      T.appendChild(cr);
+    },
+    choices: [
+      { t: '把這個測驗分享出去', next: 'bye' },
+      { t: '回到首頁，體驗其他局', next: 'menu' }
+    ]
+  };
+
+  S.bye = {
+    lines: [
+      { t: '多留三分鐘', c: 'big' },
+      '遇事掛斷電話、退出外部連結、找官方第三方查證。',
+      '那多出來的三分鐘，比任何悔恨都便宜，',
+      '也比任何事後補救都有效。'
+    ],
+    render() {
+      renderLineCTA(T);
+      const cr = document.createElement('div');
+      cr.className = 'credit';
+      cr.textContent = '守護自己與在乎的人，從建立冷靜查證的習慣開始。';
+      T.appendChild(cr);
+      addShareCTA(C);
+    },
+    choices: [{ t: '回到模擬器首頁', next: 'menu' }]
+  };
+
+  go('landing');
+})();
+</script>
+</body>
+</html>
