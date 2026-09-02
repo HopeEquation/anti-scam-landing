@@ -444,7 +444,7 @@
       (node.choices || []).forEach(ch => {
         const b = document.createElement('button');
         b.textContent = (typeof ch.t === 'function') ? ch.t() : ch.t;
-        b.onclick = () => { if (ch.do) ch.do(); if (ch.next) go(ch.next); };
+        b.onclick = () => { if (ch.do) ch.do(b); if (ch.next) go(ch.next); };
         C.appendChild(b);
       });
       if (node.render) node.render();
@@ -898,7 +898,7 @@
     lines: [
       '在日常二手交易中，請記住一條核心鐵律：',
       { t: '「所有要求你『離開平台點外部連結認證』的，全部都是假的。」', c: 'big' },
-      '正規交易平台的金流通知，只會存在於官方 APP 內建的系統通知內。',
+      '正規交易平台的金流通知，只會存在於官方 APP 內建的系統通知匣內。',
       '當心裡浮現「對方好可憐、好像是我害的」時，請默念這句護身咒：',
       { t: '「對方的帳戶問題只有官方能處理；你只是賣東西的人，不是金流工程師。」', c: 'said' },
       '永遠不要用自己的帳戶安全，去替別人的禮貌與焦慮買單。'
@@ -978,6 +978,7 @@
     choices: [{ t: '所以，我們該怎麼辦？', do: () => setBody('night'), next: 'ending' }]
   };
 
+/* ============ 終章：單頁完整合併版 ============ */
   S.ending = {
     lines: [
       '防詐從來不是智商的較量，而是「情緒與冷靜時間」的拔河。',
@@ -986,38 +987,56 @@
       { t: '在你心跳加速時，提醒你「掛掉重撥」', c: 'big' },
       { t: '在你感到孤單時，提醒你「先讓專業查證」', c: 'big' },
       { t: '在你滿懷內疚時，提醒你「這不是你的過錯」', c: 'big' },
-      '那個角色，可以是一個客觀冷靜的 AI 防詐小幫手，',
-      '也可以是我們願意隨時互通電話、不帶指責的彼此。'
+      '那個角色，可以是願意隨時互通電話、不帶指責的彼此，',
+      '也可以是一個客觀冷靜的 AI 防詐小幫手。'
     ],
     render() {
-      renderLineCTA(T);
+      // 1. 插入「官方認證」LINE 導流卡片
+      const card = document.createElement('div');
+      card.className = 'line-cta-card';
+      card.innerHTML = `
+        <div class="line-cta-badge">官方認證</div>
+        <h3 class="line-cta-title">AI 防詐小幫手．守護你的安全</h3>
+        <p class="line-cta-desc">日常對話遇到可疑訊息？隨時把截圖傳給 AI 防詐小幫手，即時為你分析話術與風險等級。</p>
+        <a href="https://lin.ee/wIxEnCH" target="_blank" rel="noopener noreferrer" class="line-cta-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.03 2 11c0 3.12 1.77 5.88 4.47 7.42-.2.74-.75 2.76-.86 3.19-.14.54.2.53.42.38.17-.11 2.37-1.61 3.32-2.26.85.18 1.74.27 2.65.27 5.52 0 10-4.03 10-9S17.52 2 12 2z"/></svg>
+          立即加入 LINE 官方帳號
+        </a>
+      `;
+      T.appendChild(card);
+
+      // 2. 插入品牌理念小字 (Credit)
       const cr = document.createElement('div');
       cr.className = 'credit';
+      cr.style.margin = '20px 0 32px';
       cr.innerHTML = 'AI 防詐小幫手｜守護每一份良善與信任<br>多一分冷靜查證，少一次不可逆的遺憾';
       T.appendChild(cr);
+
+      // 3. 接續渲染結尾提醒：「多留三分鐘」
+      const pTitle = document.createElement('p');
+      pTitle.className = 'big';
+      pTitle.style.marginTop = '28px';
+      pTitle.textContent = '多留三分鐘';
+      T.appendChild(pTitle);
+
+      const p1 = document.createElement('p');
+      p1.textContent = '遇事掛斷電話、退出外部連結、找官方第三方查證。';
+      T.appendChild(p1);
+
+      const p2 = document.createElement('p');
+      p2.textContent = '那多出來的三分鐘，比任何悔恨都便宜，也比任何事後補救都有效。';
+      T.appendChild(p2);
     },
     choices: [
-      { t: '把這個測驗分享出去', next: 'bye' },
-      { t: '回到首頁，體驗其他局', next: 'menu' }
+      {
+        t: '回到首頁，體驗其他局',
+        next: 'menu'
+      },
+      {
+        t: '把這個測驗，傳給你在乎的人',
+        do: (btn) => doShare(btn)
+      }
     ]
-  };
-
-  S.bye = {
-    lines: [
-      { t: '多留三分鐘', c: 'big' },
-      '遇事掛斷電話、退出外部連結、找官方第三方查證。',
-      '那多出來的三分鐘，比任何悔恨都便宜，',
-      '也比任何事後補救都有效。'
-    ],
-    render() {
-      renderLineCTA(T);
-      const cr = document.createElement('div');
-      cr.className = 'credit';
-      cr.textContent = '守護自己與在乎的人，從建立冷靜查證的習慣開始。';
-      T.appendChild(cr);
-      addShareCTA(C);
-    },
-    choices: [{ t: '回到模擬器首頁', next: 'menu' }]
   };
 
   go('landing');
